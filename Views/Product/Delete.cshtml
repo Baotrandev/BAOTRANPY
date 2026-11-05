@@ -1,0 +1,122 @@
+﻿
+@model SmartBook.Models.book
+
+@{
+    ViewBag.Title = "Xóa sách";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="max-width: 900px; margin: 40px auto;">
+
+    <div class="panel panel-default" style="border-radius: 12px; overflow: hidden;">
+
+        <div class="panel-heading"
+             style="background: #a83245; color: white; padding: 20px;">
+            <h3 style="margin: 0;">
+                <i class="fa fa-trash"></i> XÁC NHẬN XÓA SÁCH
+            </h3>
+        </div>
+
+        <div class="panel-body" style="padding: 30px;">
+
+            <div class="alert alert-warning">
+                <i class="fa fa-exclamation-triangle"></i>
+                Bạn có chắc chắn muốn xóa cuốn sách này không?
+                Thao tác này có thể không khôi phục được.
+            </div>
+
+            <div class="row">
+
+                <div class="col-md-4 text-center">
+                    @if (!string.IsNullOrEmpty(Model.cover_image_url))
+                    {
+                        <img src="@Url.Content(Model.cover_image_url)"
+                             alt="@Model.book_title"
+                             style="width: 180px; height: 240px;
+                                    object-fit: cover; border-radius: 8px;
+                                    box-shadow: 0 4px 12px rgba(0,0,0,.15);" />
+                    }
+                </div>
+
+                <div class="col-md-8">
+                    <h3 style="color: #263b59; font-weight: bold;">
+                        @Model.book_title
+                    </h3>
+
+                    <hr />
+
+                    <dl class="dl-horizontal">
+
+                        <dt>Mã sách</dt>
+                        <dd>@Model.book_id</dd>
+
+                        <dt>ISBN</dt>
+                        <dd>@Model.ISBN</dd>
+
+                        <dt>Thể loại</dt>
+                        <dd>
+                            @(Model.category != null
+                                ? Model.category.category_name
+                                : "Chưa phân loại")
+                        </dd>
+
+                        <dt>Nhà xuất bản</dt>
+                        <dd>
+                            @(Model.publisher != null
+                                ? Model.publisher.publisher_name
+                                : "Chưa cập nhật")
+                        </dd>
+
+                        <dt>Ngày xuất bản</dt>
+                        <dd>
+                            @(Model.publication_date.HasValue
+                                ? Model.publication_date.Value.ToString("dd/MM/yyyy")
+                                : "Chưa cập nhật")
+                        </dd>
+
+                        <dt>Số trang</dt>
+                        <dd>@Model.page_count</dd>
+
+                        <dt>Ngôn ngữ</dt>
+                        <dd>@Model.language</dd>
+
+                        <dt>Định dạng</dt>
+                        <dd>@Model.book_format</dd>
+
+                        <dt>Giá gốc</dt>
+                        <dd>@Model.original_price.ToString("N0") đ</dd>
+
+                        <dt>Giá bán</dt>
+                        <dd style="color: #d9534f; font-weight: bold;">
+                            @Model.sale_price.ToString("N0") đ
+                        </dd>
+
+                        <dt>Trạng thái</dt>
+                        <dd>@Model.status</dd>
+
+                        <dt>Mô tả</dt>
+                        <dd>@Model.description</dd>
+
+                    </dl>
+                </div>
+            </div>
+
+            <hr />
+
+            @using (Html.BeginForm("Delete", "Product",
+                new { id = Model.book_id }, FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                <button type="submit" class="btn btn-danger">
+                    <i class="fa fa-trash"></i> Xác nhận xóa
+                </button>
+
+                @Html.ActionLink("Quay lại danh sách",
+                    "Index", "Product",
+                    null, new { @class = "btn btn-default" })
+            }
+
+        </div>
+    </div>
+</div>

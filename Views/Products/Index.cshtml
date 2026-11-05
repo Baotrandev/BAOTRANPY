@@ -1,0 +1,764 @@
+﻿
+@model IEnumerable<SmartBook.Models.book>
+
+@using System.Collections.Generic
+@using System.Linq
+
+@{
+    ViewBag.Title = "Sách - SmartBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var categories = ViewBag.Categories as
+        IEnumerable<SmartBook.Models.category>;
+
+    int? selectedCategory = ViewBag.SelectedCategory;
+
+    // Danh sách tác giả theo mã sách
+    var authorsByBook =
+        ViewBag.AuthorsByBook as Dictionary<int, string>;
+}
+
+<style>
+    .books-page {
+        max-width: 1250px;
+        margin: 35px auto;
+        padding: 0 20px;
+        color: #24463c;
+    }
+
+    /* BANNER GIỚI THIỆU */
+    .books-hero {
+        background: linear-gradient(120deg, #173f37, #39796a);
+        color: white;
+        border-radius: 18px;
+        padding: 55px 50px;
+        margin-bottom: 45px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .books-hero small {
+            color: #f5d889;
+            letter-spacing: 3px;
+            font-weight: 700;
+        }
+
+        .books-hero h1 {
+            font-size: 38px;
+            font-weight: 800;
+            margin: 18px 0;
+        }
+
+        .books-hero p {
+            max-width: 650px;
+            line-height: 1.9;
+            font-size: 16px;
+        }
+
+    .hero-quote {
+        color: #f5d889;
+        font-size: 19px;
+        font-style: italic;
+        margin-top: 25px;
+    }
+
+    /* BANNER SALE OFF 50% */
+    .sale-banner {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 30px;
+        min-height: 280px;
+        padding: 45px 55px;
+        margin: 35px 0 45px;
+        border-radius: 20px;
+        overflow: hidden;
+        color: white;
+        background: linear-gradient(120deg, #183b36, #39766b);
+        box-shadow: 0 12px 30px rgba(24, 59, 54, .15);
+    }
+
+        .sale-banner::before {
+            content: "";
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            right: 15%;
+            top: -170px;
+            border: 45px solid rgba(255,255,255,.08);
+            border-radius: 50%;
+        }
+
+    .sale-content {
+        position: relative;
+        z-index: 2;
+        max-width: 620px;
+    }
+
+    .sale-label {
+        display: inline-block;
+        padding: 8px 16px;
+        border-radius: 30px;
+        background: #f5d88b;
+        color: #183b36;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: 2px;
+    }
+
+    .sale-content h2 {
+        color: white;
+        font-size: 42px;
+        font-weight: 900;
+        margin: 17px 0 10px;
+    }
+
+        .sale-content h2 span {
+            color: #f5d88b;
+        }
+
+    .sale-content p {
+        color: #edf5f1;
+        font-size: 16px;
+        line-height: 1.8;
+        margin-bottom: 22px;
+    }
+
+    .sale-button {
+        display: inline-block;
+        padding: 13px 25px;
+        border-radius: 8px;
+        background: #f5d88b;
+        color: #183b36;
+        font-weight: 800;
+        text-decoration: none;
+        transition: .3s;
+    }
+
+        .sale-button:hover {
+            background: white;
+            color: #183b36;
+            text-decoration: none;
+            transform: translateY(-3px);
+        }
+
+    .sale-percent {
+        position: relative;
+        z-index: 2;
+        min-width: 190px;
+        text-align: center;
+        font-size: 105px;
+        line-height: 1;
+        font-weight: 900;
+        color: #f5d88b;
+        text-shadow: 4px 7px 0 rgba(0,0,0,.12);
+    }
+
+        .sale-percent small {
+            display: block;
+            font-size: 25px;
+            letter-spacing: 5px;
+            color: white;
+            margin-top: 12px;
+        }
+
+    /* TIÊU ĐỀ */
+    .books-heading {
+        margin-bottom: 25px;
+    }
+
+        .books-heading h2 {
+            font-size: 29px;
+            font-weight: 800;
+            color: #173f37;
+        }
+
+        .books-heading p {
+            color: #888;
+        }
+
+    /* DANH MỤC */
+    .category-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 25px 0 45px;
+    }
+
+    .category-item {
+        padding: 12px 21px;
+        border: 1px solid #dce8e2;
+        border-radius: 30px;
+        color: #28594b;
+        background: #f7faf8;
+        text-decoration: none;
+        font-weight: 600;
+        transition: .25s;
+    }
+
+        .category-item:hover,
+        .category-item.active {
+            background: #204e43;
+            color: white;
+            border-color: #204e43;
+            text-decoration: none;
+        }
+
+    /* THÔNG ĐIỆP */
+    .category-message {
+        background: #f7f5ed;
+        border-left: 5px solid #d7b45f;
+        border-radius: 9px;
+        padding: 20px 25px;
+        margin-bottom: 25px;
+    }
+
+        .category-message .quote {
+            color: #31594d;
+            font-size: 18px;
+            font-weight: 600;
+            font-style: italic;
+        }
+
+        .category-message p {
+            color: #777;
+            margin: 9px 0 0;
+        }
+
+    /* DANH SÁCH SÁCH */
+    .book-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 22px;
+    }
+
+    .book-card {
+        border: 1px solid #e8eeea;
+        border-radius: 14px;
+        overflow: hidden;
+        background: white;
+        transition: .3s;
+    }
+
+        .book-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 28px rgba(0,0,0,.09);
+        }
+
+    .book-cover {
+        height: 250px;
+        padding: 15px;
+        background: #f7f8f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+    .book-detail {
+        padding: 17px;
+    }
+
+        .book-detail h4 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #24463c;
+            line-height: 1.5;
+            min-height: 48px;
+        }
+
+    /* TÊN TÁC GIẢ */
+    .book-author {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin: 8px 0 12px;
+        color: #8a7968;
+        font-size: 13px;
+        font-weight: 500;
+        min-height: 20px;
+    }
+
+        .book-author i {
+            color: #b18b58;
+            font-size: 12px;
+        }
+
+        .book-author span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+    .book-description {
+        color: #888;
+        font-size: 13px;
+        min-height: 40px;
+        line-height: 1.5;
+    }
+
+    .book-price {
+        color: #c45b42;
+        font-size: 19px;
+        font-weight: 800;
+        margin: 12px 0;
+    }
+
+    .book-original-price {
+        color: #999;
+        font-size: 13px;
+        text-decoration: line-through;
+    }
+
+    .book-button {
+        display: block;
+        background: #204e43;
+        color: white;
+        padding: 11px;
+        text-align: center;
+        border-radius: 7px;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 13px;
+    }
+
+    /* KHU VUC CAC NUT MUA SACH */
+    .book-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 9px;
+        margin-top: 13px;
+    }
+
+    /* NUT THEM VAO GIO */
+    .add-cart-btn {
+        display: block;
+        width: 100%;
+        padding: 11px;
+        border: 1px solid #39796a;
+        border-radius: 7px;
+        background: #39796a;
+        color: white;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+        .add-cart-btn:hover {
+            background: #173f37;
+            border-color: #173f37;
+            transform: translateY(-2px);
+        }
+
+    /* NUT XEM CHI TIET */
+    .book-actions .book-button {
+        margin-top: 0;
+    }
+
+
+        .book-button:hover {
+            background: #39796a;
+            color: white;
+            text-decoration: none;
+        }
+
+    .category-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #e5ebe7;
+        margin-bottom: 22px;
+        padding-bottom: 12px;
+    }
+
+        .category-title h3 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #204e43;
+        }
+
+        .category-title span {
+            color: #999;
+            font-size: 13px;
+        }
+
+    .book-section {
+        margin-bottom: 55px;
+        scroll-margin-top: 30px;
+    }
+
+    .empty-books {
+        text-align: center;
+        background: #f7faf8;
+        padding: 40px;
+        border-radius: 12px;
+        color: #777;
+    }
+
+    /* RESPONSIVE */
+    @@media (max-width: 768px) {
+        .book-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .book-cover {
+            height: 190px;
+        }
+
+        .books-hero {
+            padding: 35px 25px;
+        }
+
+            .books-hero h1 {
+                font-size: 27px;
+            }
+
+        .sale-banner {
+            padding: 35px 25px;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .sale-content h2 {
+            font-size: 30px;
+        }
+
+        .sale-percent {
+            font-size: 75px;
+            align-self: center;
+        }
+        /* FONT TRANG SÁCH */
+        .books-page,
+        .books-page * {
+            font-family: 'Be Vietnam Pro', sans-serif;
+        }
+
+        .books-hero h1,
+        .books-heading h2,
+        .category-title h3,
+        .book-detail h4 {
+            font-weight: 800;
+        }
+
+        .book-author {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            font-size: 13px;
+            color: #8a7968;
+        }
+
+        .book-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+            margin-top: 15px;
+        }
+
+            .book-actions form {
+                margin: 0;
+            }
+
+        .add-cart-btn {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #39766b;
+            border-radius: 8px;
+            background: #fff;
+            color: #28594b;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .25s;
+        }
+
+            .add-cart-btn:hover {
+                background: #39766b;
+                color: white;
+                transform: translateY(-2px);
+            }
+
+            .add-cart-btn i {
+                margin-right: 7px;
+            }
+
+        .book-actions .book-button {
+            margin-top: 0;
+        }
+
+    }
+</style>
+
+<div class="books-page">
+
+    <!-- BANNER SALE OFF -->
+    <section class="sale-banner">
+        <div class="sale-content">
+
+            <span class="sale-label">
+                SMARTBOOK SPECIAL OFFER
+            </span>
+
+            <h2>
+                SALE OFF <span>50%</span>
+            </h2>
+
+            <p>
+                Ưu đãi đặc biệt dành cho những người yêu sách.
+                Khám phá kho tàng tri thức và lựa chọn
+                cuốn sách yêu thích với mức ưu đãi hấp dẫn.
+            </p>
+
+            <a href="#danh-sach-sach" class="sale-button">
+                MUA SÁCH NGAY →
+            </a>
+
+        </div>
+
+        <div class="sale-percent">
+            50%
+            <small>OFF</small>
+        </div>
+    </section>
+
+    <!-- BANNER GIỚI THIỆU -->
+    <section class="books-hero">
+
+        <small>SMARTBOOK COLLECTION</small>
+
+        <h1>Mỗi cuốn sách, một thế giới mới</h1>
+
+        <p>
+            Khám phá kho tàng tri thức phong phú tại SmartBook.
+            Từ những tác phẩm văn học kinh điển đến sách kỹ năng,
+            giáo dục và thiếu nhi, mỗi trang sách đều mở ra
+            một hành trình khám phá mới.
+        </p>
+
+        <div class="hero-quote">
+            “Đọc sách hôm nay, kiến tạo tương lai ngày mai.”
+        </div>
+
+    </section>
+
+    <!-- DANH MỤC -->
+    <div class="books-heading">
+
+        <h2>Khám phá theo thể loại</h2>
+
+        <p>
+            Lựa chọn thể loại phù hợp với sở thích và nhu cầu của bạn.
+        </p>
+
+    </div>
+
+    <div class="category-list" id="danh-sach-sach">
+
+        <a href="@Url.Action("Index", "Products")"
+           class="category-item @(selectedCategory == null ? "active" : "")">
+            Tất cả sách
+        </a>
+
+        @if (categories != null)
+        {
+            foreach (var category in categories)
+            {
+                <a href="@Url.Action("Index", "Products",
+                    new { categoryId = category.category_id })"
+                   class="category-item @(selectedCategory == category.category_id ? "active" : "")">
+                    @category.category_name
+                </a>
+            }
+        }
+
+    </div>
+
+    </section>
+
+
+    <!-- DANH SÁCH SÁCH -->
+    @if (Model != null && Model.Any())
+    {
+        var groups = Model.GroupBy(x =>
+            x.category == null
+                ? "Sách khác"
+                : x.category.category_name);
+
+        foreach (var group in groups)
+        {
+            string quote = "Mỗi trang sách là một cơ hội để khám phá điều mới.";
+            string message = "Hãy dành thời gian đọc sách mỗi ngày để phát triển bản thân.";
+
+            if (group.Key.Contains("Văn học"))
+            {
+                quote = "Văn học giúp ta sống thêm nhiều cuộc đời.";
+                message = "Đắm mình trong những câu chuyện, cảm nhận tình yêu, cuộc sống và những giá trị nhân văn.";
+            }
+            else if (group.Key.Contains("Kỹ năng"))
+            {
+                quote = "Thay đổi tư duy là bước đầu tiên để thay đổi cuộc đời.";
+                message = "Mỗi kiến thức mới là một công cụ giúp bạn tự tin hơn trong học tập, công việc và cuộc sống.";
+            }
+            else if (group.Key.Contains("Thiếu nhi"))
+            {
+                quote = "Một cuốn sách hay có thể gieo một ước mơ đẹp.";
+                message = "Nuôi dưỡng trí tưởng tượng, lòng nhân ái và niềm yêu thích khám phá từ những trang sách đầu đời.";
+            }
+            else if (group.Key.Contains("Giáo dục"))
+            {
+                quote = "Học tập là hành trình không có điểm kết thúc.";
+                message = "Tích lũy kiến thức mỗi ngày để phát triển tư duy, kỹ năng và mở rộng cơ hội tương lai.";
+            }
+
+            <section class="book-section">
+
+                <div class="category-title">
+                    <h3>@group.Key</h3>
+                    <span>@group.Count() sản phẩm</span>
+                </div>
+
+                <div class="category-message">
+
+                    <div class="quote">
+                        “@quote”
+                    </div>
+
+                    <p>@message</p>
+
+                </div>
+
+                <div class="book-grid">
+
+                    @foreach (var book in group)
+                    {
+                        var image = book.cover_image_url;
+
+                        if (String.IsNullOrWhiteSpace(image))
+                        {
+                            image = Url.Content("~/Images/no-image.png");
+                        }
+                        else if (image.StartsWith("~/"))
+                        {
+                            image = Url.Content(image);
+                        }
+                        else if (!image.StartsWith("http") && !image.StartsWith("/"))
+                        {
+                            image = Url.Content("~/Images/" + image);
+                        }
+
+                        <div class="book-card">
+
+                            <!-- ẢNH BÌA -->
+                            <a href="@Url.Action("Details", "Products",
+                                new { id = book.book_id })"
+                               class="book-cover">
+
+                                <img src="@image"
+                                     alt="@book.book_title" />
+
+                            </a>
+
+                            <div class="book-detail">
+
+                                <!-- TÊN SÁCH -->
+                                <h4>@book.book_title</h4>
+
+
+                                <div class="book-author">
+                                    <i class="fa-solid fa-pen-nib"></i>
+
+                                    <span>
+                                        @if (authorsByBook != null &&
+                                             authorsByBook.ContainsKey(book.book_id) &&
+                                             !string.IsNullOrWhiteSpace(authorsByBook[book.book_id]))
+                                        {
+                                            @authorsByBook[book.book_id]
+                                        }
+                                        else
+                                        {
+                                            @:Đang cập nhật tác giả
+                                        }
+                                    </span>
+                                </div>
+
+                                <!-- MÔ TẢ -->
+                                <p class="book-description">
+                                    @book.description
+                                </p>
+
+                                <!-- GIÁ BÁN -->
+                                <div class="book-price">
+                                    @String.Format("{0:N0} đ", book.sale_price)
+                                </div>
+
+                                <!-- GIÁ GỐC -->
+                                <div class="book-original-price">
+                                    Giá gốc:
+                                    @String.Format("{0:N0} đ", book.original_price)
+                                </div>
+
+
+                                <!-- CAC NUT CHUC NANG -->
+                                <div class="book-actions">
+                                    @using (Html.BeginForm("Add", "Cart", FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        @Html.Hidden("id", book.book_id)
+
+                                        <input type="number"
+                                               name="quantity"
+                                               value="1"
+                                               min="1" />
+
+                                        <button type="submit">
+                                            <i class="fa-solid fa-cart-plus"></i>
+                                            Thêm vào giỏ hàng
+                                        </button>
+                                    }
+
+                                    <a href="@Url.Action("Details", "Products",
+                                       new { id = book.book_id })"
+                                       class="book-button">
+                                        Xem chi tiết
+                                        <i class="fa-solid fa-arrow-right"></i>
+                                    </a>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+            </section>
+        }
+    }
+    else
+    {
+        <div class="empty-books">
+
+            <h3>Chưa có sách trong danh mục này</h3>
+
+            <p>
+                Hãy quay lại sau để khám phá thêm những cuốn sách mới nhé!
+            </p>
+
+            <a href="@Url.Action("Index", "Products")"
+               class="book-button">
+                Xem tất cả sách
+            </a>
+
+        </div>
+    }
+
+</div>

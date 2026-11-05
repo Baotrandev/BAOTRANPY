@@ -1,0 +1,91 @@
+﻿@model SmartBook.Models.customer_addresses
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>customer_addresses</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.recipient_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.recipient_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.phone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.phone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.province)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.province)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.district)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.district)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ward)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ward)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.street_address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.street_address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.is_default)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.is_default)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.created_at)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.created_at)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.customer.full_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.customer.full_name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.address_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

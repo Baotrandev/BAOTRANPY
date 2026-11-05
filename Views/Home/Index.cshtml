@@ -1,0 +1,1173 @@
+﻿
+@model SmartBook.Models.HomeViewModel
+
+@{
+    ViewBag.Title = "Trang chủ - SmartBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var sections = Model == null ? null : Model.Sections;
+}
+
+<style>
+    /* FONT CHỮ TOÀN BỘ TRANG CHỦ */
+    .home-page,
+    .home-page * {
+        font-family: 'Be Vietnam Pro', sans-serif !important;
+        box-sizing: border-box;
+    }
+
+    .home-page {
+        font-size: 14px;
+        color: #292929;
+        padding-bottom: 40px;
+    }
+    /* BANNER */
+    .hero {
+        margin: 30px 0 45px;
+        padding: 65px 45px;
+        border-radius: 18px;
+        color: white;
+        background: linear-gradient(120deg, #183b36, #39766b);
+    }
+
+        .hero .slogan {
+            color: #f5d88b;
+            letter-spacing: 3px;
+            font-weight: bold;
+            font-size: 13px;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 800;
+            margin: 20px 0;
+            line-height: 1.3;
+        }
+
+        .hero p {
+            font-size: 16px;
+            line-height: 1.8;
+            max-width: 650px;
+        }
+
+    .hero-btn {
+        display: inline-block;
+        padding: 13px 25px;
+        background: #f5d88b;
+        color: #183b36;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 15px;
+    }
+
+        .hero-btn:hover {
+            background: white;
+            color: #183b36;
+            text-decoration: none;
+        }
+
+    /* TIÊU ĐỀ */
+    .section-title {
+        color: #183b36;
+        font-size: 27px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+        color: #777;
+        margin-bottom: 20px;
+        line-height: 1.7;
+    }
+
+    /* DANH MỤC */
+    .category-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin: 20px 0 45px;
+    }
+
+        .category-nav a {
+            padding: 11px 20px;
+            border: 1px solid #d8e4df;
+            border-radius: 25px;
+            color: #28574d;
+            background: #f7faf8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+            .category-nav a:hover {
+                background: #28574d;
+                color: white;
+            }
+
+    /* KHU VỰC SÁCH */
+    .category-section {
+        margin-bottom: 50px;
+        scroll-margin-top: 25px;
+    }
+
+    .category-heading {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 2px solid #e7eee9;
+        padding-bottom: 12px;
+        margin-bottom: 20px;
+    }
+
+        .category-heading h3 {
+            color: #244f45;
+            font-size: 23px;
+            font-weight: bold;
+            margin: 0;
+        }
+
+    .view-all {
+        color: #347767;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+        .view-all:hover {
+            color: #183b36;
+            text-decoration: underline;
+        }
+
+    /* THẺ SÁCH */
+    .book-card {
+        height: 100%;
+        border: 1px solid #eee;
+        border-radius: 12px;
+        padding: 14px;
+        background: white;
+        margin-bottom: 25px;
+        box-shadow: 0 3px 12px rgba(0,0,0,.04);
+        transition: .25s;
+    }
+
+        .book-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 22px rgba(0,0,0,.10);
+        }
+
+    .book-image {
+        display: block;
+        width: 100%;
+        height: 220px;
+        object-fit: contain;
+        background: #f7f7f7;
+        border-radius: 8px;
+        padding: 8px;
+    }
+
+    .no-image {
+        width: 100%;
+        height: 220px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #f7f7f7;
+        border-radius: 8px;
+        color: #888;
+        font-size: 13px;
+    }
+
+    .book-name {
+        font-size: 16px;
+        font-weight: bold;
+        min-height: 48px;
+        overflow: hidden;
+        margin-top: 12px;
+        line-height: 1.5;
+    }
+
+    .book-price {
+        color: #c0392b;
+        font-size: 18px;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    .old-price {
+        color: #999;
+        font-size: 13px;
+        text-decoration: line-through;
+        margin-top: 4px;
+    }
+
+    .sale-label {
+        display: inline-block;
+        background: #c0392b;
+        color: white;
+        font-size: 12px;
+        padding: 4px 8px;
+        border-radius: 4px;
+        margin-top: 5px;
+    }
+
+    .book-detail {
+        display: block;
+        text-align: center;
+        background: #28574d;
+        color: white;
+        padding: 10px;
+        border-radius: 7px;
+        text-decoration: none;
+        font-weight: bold;
+        margin-top: 13px;
+    }
+
+        .book-detail:hover {
+            background: #183b36;
+            color: white;
+            text-decoration: none;
+        }
+
+    /* THÔNG ĐIỆP */
+    .message-section {
+        background: #f5f8f5;
+        border-left: 5px solid #39766b;
+        padding: 35px;
+        border-radius: 10px;
+        margin: 20px 0 55px;
+        text-align: center;
+    }
+
+        .message-section h2 {
+            color: #244f45;
+            font-weight: bold;
+        }
+
+        .message-section p {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+    @@media(max-width:768px) {
+        .hero {
+            padding: 35px 22px;
+        }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+        .category-heading {
+            gap: 10px;
+        }
+        .book-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+        .book-image {
+            height: 190px;
+        }
+        .no-image {
+            height: 190px;
+        }
+        /* NÚT KHÁM PHÁ SÁCH */
+        .btn-explore {
+            display: inline-block;
+            background: #f5d889;
+            color: #173f38;
+            padding: 15px 25px;
+            border-radius: 9px;
+            font-weight: 700;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+            .btn-explore:hover {
+                background: #eac66e;
+                color: #173f38;
+                transform: translateY(-3px);
+            }
+        /* KHU VỰC KHÁM PHÁ SÁCH */
+        .explore-section {
+            max-width: 1300px;
+            margin: 55px auto;
+            padding: 20px;
+            scroll-margin-top: 30px;
+        }
+
+        .explore-heading {
+            margin-bottom: 40px;
+        }
+        .explore-label {
+            color: #b28a42;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .explore-heading h2 {
+            color: #173f38;
+            font-size: 32px;
+            font-weight: 800;
+            margin: 10px 0;
+        }
+
+        .explore-heading p {
+            color: #777;
+            font-size: 15px;
+        }
+
+        .book-category-section {
+            margin-bottom: 45px;
+        }
+
+        .category-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e5eae7;
+            margin-bottom: 22px;
+            padding-bottom: 12px;
+        }
+
+            .category-heading h3 {
+                color: #173f38;
+                font-size: 23px;
+                font-weight: 700;
+            }
+
+            .category-heading span {
+                color: #888;
+                font-size: 13px;
+            }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .book-card {
+            background: #fff;
+            border: 1px solid #e9eeeb;
+            border-radius: 14px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+            .book-card:hover {
+                transform: translateY(-6px);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.09);
+            }
+
+        .book-image {
+            display: flex;
+            height: 240px;
+            background: #f7f8f6;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+        }
+
+            .book-image img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+            }
+
+        .book-info {
+            padding: 17px;
+        }
+
+            .book-info h4 {
+                color: #263b35;
+                font-size: 16px;
+                min-height: 44px;
+                line-height: 1.5;
+                margin-bottom: 12px;
+            }
+
+        .book-price {
+            color: #c45b42;
+            font-size: 19px;
+            font-weight: 800;
+        }
+
+        .old-price {
+            color: #999;
+            text-decoration: line-through;
+            font-size: 13px;
+            margin-top: 4px;
+        }
+
+        .btn-view-book {
+            display: block;
+            text-align: center;
+            background: #204e43;
+            color: white;
+            padding: 11px;
+            margin-top: 15px;
+            border-radius: 7px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+            .btn-view-book:hover {
+                background: #347363;
+                color: white;
+            }
+    }
+
+/* =========================================
+   SMARTBOOK - HERO BANNER
+========================================= */
+
+.home-page {
+    width: 100%;
+    max-width: 1300px;
+    margin: 0 auto;
+    padding: 25px 20px 60px;
+    font-family: 'Be Vietnam Pro', sans-serif !important;
+}
+
+.home-hero {
+    position: relative;
+    overflow: hidden;
+    min-height: 450px;
+    padding: 65px 55px 35px;
+    margin: 15px 0 55px;
+    border-radius: 22px;
+    color: #fff;
+    background: linear-gradient(120deg, #173f38, #397b6d);
+    box-shadow: 0 15px 40px rgba(23, 63, 56, .13);
+}
+
+.hero-container {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 1.2fr .8fr;
+    align-items: center;
+    gap: 35px;
+}
+
+.hero-content {
+    max-width: 680px;
+}
+
+.hero-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #f5d88b;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+}
+
+.hero-label-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #f5d88b;
+}
+
+.hero-content h1 {
+    color: #fff;
+    font-size: 43px;
+    line-height: 1.3;
+    font-weight: 800;
+    margin: 0 0 22px;
+}
+
+.hero-content h1 span {
+    display: block;
+    color: #f5d88b;
+}
+
+.hero-description {
+    color: rgba(255,255,255,.9);
+    font-size: 15px;
+    line-height: 1.9;
+    max-width: 650px;
+    margin-bottom: 25px;
+}
+
+.hero-buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.hero-button-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 23px;
+    border-radius: 8px;
+    background: #f5d88b;
+    color: #173f38 !important;
+    font-weight: 800;
+    text-decoration: none !important;
+    transition: .25s;
+}
+
+.hero-button-primary:hover {
+    background: #fff;
+    transform: translateY(-3px);
+}
+
+.hero-button-secondary {
+    color: #fff !important;
+    font-weight: 600;
+    text-decoration: none !important;
+    padding: 12px 5px;
+}
+
+.hero-button-secondary:hover {
+    color: #f5d88b !important;
+}
+
+.hero-statistics {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+    margin-top: 35px;
+}
+
+.hero-stat-item strong,
+.hero-stat-item span {
+    display: block;
+}
+
+.hero-stat-item strong {
+    color: #f5d88b;
+    font-size: 15px;
+    margin-bottom: 4px;
+}
+
+.hero-stat-item span {
+    color: rgba(255,255,255,.8);
+    font-size: 12px;
+}
+
+.hero-stat-divider {
+    height: 38px;
+    width: 1px;
+    background: rgba(255,255,255,.3);
+}
+
+/* HÌNH MINH HỌA SÁCH */
+
+.hero-visual {
+    position: relative;
+    min-height: 330px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero-visual-glow {
+    position: absolute;
+    width: 280px;
+    height: 280px;
+    background: rgba(245,216,139,.15);
+    border-radius: 50%;
+    filter: blur(5px);
+}
+
+.hero-book-card {
+    position: absolute;
+    width: 205px;
+    height: 280px;
+    padding: 20px;
+    border-radius: 9px;
+    box-shadow: 0 20px 35px rgba(0,0,0,.25);
+}
+
+.book-card-back {
+    background: #e8d6ad;
+    color: #28574d;
+    transform: rotate(-12deg) translate(-65px, 5px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.book-card-back span {
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+.book-card-back strong {
+    font-size: 24px;
+    line-height: 1.4;
+    margin: 20px 0;
+}
+
+.book-card-back small {
+    font-size: 9px;
+}
+
+.book-decoration {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #d8ad5b;
+    top: 18px;
+    right: 18px;
+}
+
+.book-card-front {
+    background: linear-gradient(145deg, #fff9e9, #e7d8b8);
+    color: #234e43;
+    transform: rotate(7deg) translate(50px, 5px);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.book-card-top,
+.book-card-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.book-card-top span {
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.book-card-top i {
+    font-size: 19px;
+}
+
+.book-card-center {
+    position: relative;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    background: linear-gradient(#f4dca7, #d7e6c7);
+}
+
+.book-card-center strong {
+    position: relative;
+    z-index: 2;
+    font-size: 23px;
+    line-height: 1.4;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.book-sun {
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: #e8ae52;
+    top: 15px;
+    right: 30px;
+}
+
+.book-hill {
+    position: absolute;
+    width: 180px;
+    height: 80px;
+    border-radius: 50% 50% 0 0;
+    bottom: -50px;
+}
+
+.hill-one {
+    background: #638b68;
+    left: -50px;
+}
+
+.hill-two {
+    background: #315e4d;
+    right: -60px;
+}
+
+.book-card-bottom span {
+    font-size: 8px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.book-card-bottom small {
+    font-size: 8px;
+}
+
+/* GHI CHÚ NỔI */
+
+.hero-floating-note {
+    position: absolute;
+    z-index: 4;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #fff;
+    color: #234e43;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0,0,0,.15);
+}
+
+.hero-floating-note > i {
+    font-size: 21px;
+    color: #397b6d;
+}
+
+.hero-floating-note strong,
+.hero-floating-note span {
+    display: block;
+}
+
+.hero-floating-note strong {
+    font-size: 12px;
+}
+
+.hero-floating-note span {
+    color: #84918b;
+    font-size: 10px;
+}
+
+.note-top {
+    top: 12px;
+    right: -5px;
+}
+
+.note-bottom {
+    bottom: 15px;
+    left: -5px;
+}
+
+.hero-circle-text {
+    position: absolute;
+    right: 0;
+    bottom: -30px;
+    color: rgba(255,255,255,.5);
+    font-size: 9px;
+    letter-spacing: 3px;
+}
+
+.hero-background-circle {
+    position: absolute;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 50%;
+}
+
+.circle-one {
+    width: 300px;
+    height: 300px;
+    right: -100px;
+    top: -130px;
+}
+
+.circle-two {
+    width: 200px;
+    height: 200px;
+    left: -100px;
+    bottom: -100px;
+}
+
+/* SLOGAN CUỐI BANNER */
+
+.hero-bottom-line {
+    position: relative;
+    z-index: 2;
+    margin-top: 35px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,.2);
+    color: #f5d88b;
+    font-size: 14px;
+    font-style: italic;
+    font-weight: 600;
+}
+
+/* THÔNG ĐIỆP */
+
+.message-section {
+    background: #f0f7f3;
+    border-left: 5px solid #397b6d;
+    padding: 35px 25px;
+    border-radius: 12px;
+    margin: 25px 0 55px;
+    text-align: center;
+}
+
+.message-section h2 {
+    color: #204e43;
+    font-size: 25px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+.message-section p {
+    color: #687d74;
+    font-size: 15px;
+    line-height: 1.9;
+    margin: 0;
+}
+
+/* RESPONSIVE */
+
+   @@media (max-width: 768px) {
+    .home-hero {
+        padding: 35px 22px;
+    }
+
+    .hero-container {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-content h1 {
+        font-size: 30px;
+    }
+
+    .hero-visual {
+        min-height: 330px;
+    }
+
+    .hero-statistics {
+        flex-wrap: wrap;
+    }
+
+    .hero-floating-note {
+        padding: 9px 11px;
+    }
+}
+
+
+</style>
+
+<div class="container home-page">
+
+    <!-- 1. BANNER -->
+    
+<section class="home-hero">
+    <div class="hero-background-circle circle-one"></div>
+    <div class="hero-background-circle circle-two"></div>
+
+    <div class="hero-container">
+
+        <!-- NỘI DUNG BÊN TRÁI -->
+        <div class="hero-content">
+
+            <div class="hero-label">
+                <span class="hero-label-dot"></span>
+                SMARTBOOK COLLECTION
+            </div>
+
+            <h1>
+                Mở một trang sách,
+                <span>mở ra ngàn thế giới.</span>
+            </h1>
+
+            <p class="hero-description">
+                Mỗi cuốn sách là một hành trình mới.
+                Cùng SmartBook khám phá kho tàng tri thức phong phú,
+                nuôi dưỡng tư duy và phát triển bản thân mỗi ngày.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="@Url.Action("Index", "Products")"
+                   class="hero-button-primary">
+                    KHÁM PHÁ SÁCH
+                    <i class="fa-solid fa-arrow-right"></i>
+                </a>
+
+                <a href="@Url.Action("About", "Home")"
+                   class="hero-button-secondary">
+                    Về SmartBook
+                </a>
+            </div>
+
+            <div class="hero-statistics">
+                <div class="hero-stat-item">
+                    <strong>Tri thức</strong>
+                    <span>Mở rộng mỗi ngày</span>
+                </div>
+
+                <div class="hero-stat-divider"></div>
+
+                <div class="hero-stat-item">
+                    <strong>Cảm hứng</strong>
+                    <span>Bắt đầu từ trang sách</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- HÌNH MINH HỌA BÊN PHẢI -->
+        <div class="hero-visual">
+
+            <div class="hero-visual-glow"></div>
+
+            <div class="hero-book-card book-card-back">
+                <div class="book-decoration"></div>
+                <span>KNOWLEDGE</span>
+                <strong>THE WORLD<br />OF BOOKS</strong>
+                <small>READ • LEARN • GROW</small>
+            </div>
+
+            <div class="hero-book-card book-card-front">
+                <div class="book-card-top">
+                    <span>SMARTBOOK</span>
+                    <i class="fa-solid fa-book-open"></i>
+                </div>
+
+                <div class="book-card-center">
+                    <div class="book-sun"></div>
+                    <div class="book-hill hill-one"></div>
+                    <div class="book-hill hill-two"></div>
+                    <strong>THE<br />JOURNEY<br />BEGINS</strong>
+                </div>
+
+                <div class="book-card-bottom">
+                    <span>DISCOVER YOUR WORLD</span>
+                    <small>EST. 2026</small>
+                </div>
+            </div>
+
+            <div class="hero-floating-note note-top">
+                <i class="fa-solid fa-book-open"></i>
+                <div>
+                    <strong>Read more</strong>
+                    <span>Grow every day</span>
+                </div>
+            </div>
+
+            <div class="hero-floating-note note-bottom">
+                <i class="fa-solid fa-star"></i>
+                <div>
+                    <strong>Khám phá tri thức</strong>
+                    <span>Hành trình của bạn</span>
+                </div>
+            </div>
+
+            <div class="hero-circle-text">READ • DISCOVER • GROW</div>
+
+        </div>
+
+    </div>
+
+    <div class="hero-bottom-line">
+        <span>“Đọc sách hôm nay, kiến tạo tương lai ngày mai.”</span>
+    </div>
+
+</section>
+
+
+    <!-- 2. DANH MỤC -->
+    <section>
+
+        <h2 class="section-title">
+            Khám phá theo chủ đề
+        </h2>
+
+
+        <p class="section-subtitle">
+            Chọn chủ đề yêu thích và tìm cuốn sách dành cho bạn.
+        </p>
+
+        <div class="category-nav">
+
+            @if (sections != null)
+            {
+                foreach (var categoryItem in sections)
+                {
+                    if (categoryItem != null && categoryItem.Category != null)
+                    {
+                        <a href="#category-@categoryItem.Category.category_id">
+                            @categoryItem.Category.category_name
+                        </a>
+                    }
+                }
+            }
+
+        </div>
+
+    </section>
+
+    <!-- 3. THÔNG ĐIỆP -->
+    <section class="message-section">
+
+        <h2>
+            Tri thức bắt đầu từ những trang sách
+        </h2>
+
+        <p>
+            Đọc hôm nay - Hiểu biết ngày mai.<br />
+            Khám phá điều mới, phát triển tư duy
+            và biến mỗi ngày thành một hành trình trưởng thành.
+        </p>
+
+    </section>
+
+    <!-- 4. SÁCH THEO CHỦ ĐỀ -->
+    @if (sections != null && sections.Any())
+    {
+        foreach (var categoryItem in sections)
+        {
+            if (categoryItem == null || categoryItem.Category == null)
+            {
+                continue;
+            }
+
+            <section class="category-section"
+                     id="category-@categoryItem.Category.category_id">
+
+                <!-- TÊN CHỦ ĐỀ -->
+                <div class="category-heading">
+
+                    <h3>
+                        @categoryItem.Category.category_name
+                    </h3>
+
+                    <a class="view-all"
+                       href="@Url.Action(
+                           "Index",
+                           "Products",
+                           new {
+                               categoryId = categoryItem.Category.category_id
+                           })">
+                        Xem tất cả →
+                    </a>
+
+                </div>
+
+                <!-- MÔ TẢ -->
+                @if (!string.IsNullOrWhiteSpace(categoryItem.Category.description))
+                {
+                    <p class="section-subtitle">
+                        @categoryItem.Category.description
+                    </p>
+                }
+
+                <!-- DANH SÁCH SÁCH -->
+                @if (categoryItem.Books != null && categoryItem.Books.Any())
+                {
+                    <div class="row">
+
+                        @foreach (var item in categoryItem.Books)
+                        {
+                            <div class="col-md-3 col-sm-6">
+
+                                <div class="book-card">
+
+                                    @{
+                                        var imageUrl = item.cover_image_url;
+
+                                        if (!string.IsNullOrWhiteSpace(imageUrl))
+                                        {
+                                            imageUrl = imageUrl.Trim();
+
+                                            if (imageUrl.StartsWith("http://")
+                                                || imageUrl.StartsWith("https://")
+                                                || imageUrl.StartsWith("~/")
+                                                || imageUrl.StartsWith("/"))
+                                            {
+                                                // Giữ nguyên đường dẫn
+                                            }
+                                            else if (imageUrl.StartsWith("Images/",
+                                                StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                imageUrl = "~/" + imageUrl;
+                                            }
+                                            else
+                                            {
+                                                imageUrl = "~/Images/" + imageUrl;
+                                            }
+                                        }
+                                    }
+
+                                    <!-- ẢNH BÌA -->
+                                    @if (!string.IsNullOrWhiteSpace(imageUrl))
+                                    {
+                                        <img class="book-image"
+                                             src="@Url.Content(imageUrl)"
+                                             alt="@item.book_title"
+                                             onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='flex';" />
+
+                                        <div class="no-image" style="display:none;">
+                                            Không tìm thấy ảnh bìa
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="no-image">
+                                            Chưa có ảnh bìa
+                                        </div>
+                                    }
+
+                                    <!-- TÊN SÁCH -->
+                                    <div class="book-name">
+                                        @item.book_title
+                                    </div>
+
+                                    <!-- GIÁ BÁN -->
+                                    <div class="book-price">
+                                        @item.sale_price.ToString("N0") đ
+                                    </div>
+
+                                    <!-- GIÁ GỐC VÀ GIẢM GIÁ -->
+                                    @if (item.original_price > item.sale_price
+                                         && item.original_price > 0)
+                                    {
+                                        <div class="old-price">
+                                            @item.original_price.ToString("N0") đ
+                                        </div>
+
+                                        <span class="sale-label">
+                                            Giảm @Math.Round(
+                                           (item.original_price - item.sale_price)
+                                           * 100 / item.original_price
+                                       )%
+                                        </span>
+                                    }
+
+                                    <!-- CHI TIẾT -->
+                                    <a class="book-detail"
+                                       href="@Url.Action(
+                                           "Details",
+                                           "Products",
+                                           new { id = item.book_id })">
+                                        Xem chi tiết
+                                    </a>
+
+                                </div>
+
+                            </div>
+                        }
+
+                    </div>
+                }
+                else
+                {
+                    <p class="section-subtitle">
+                        Chưa có sách trong chủ đề này.
+                    </p>
+                }
+
+            </section>
+        }
+    }
+    else
+    {
+        <div class="message-section">
+
+            <h3>SmartBook đang cập nhật sách</h3>
+
+            <p>
+                Vui lòng quay lại sau nhé!
+            </p>
+
+        </div>
+    }
+
+</div>

@@ -1,0 +1,653 @@
+﻿
+@model List<SmartBook.Models.CartItemViewModel>
+
+@{
+    ViewBag.Title = "Giỏ hàng của tôi - SmartBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var cart = Model ?? new List<SmartBook.Models.CartItemViewModel>();
+    decimal subtotal = cart.Sum(x => x.LineTotal);
+    int totalQuantity = cart.Sum(x => x.Quantity);
+}
+
+<style>
+    .cart-page {
+        background: #f7faf8;
+        min-height: 75vh;
+        padding: 55px 0 80px;
+        color: #183b36;
+        font-family: 'Be Vietnam Pro', sans-serif;
+    }
+
+    .cart-container {
+        width: 90%;
+        max-width: 1250px;
+        margin: auto;
+    }
+
+    .cart-heading {
+        text-align: center;
+        margin-bottom: 38px;
+    }
+
+        .cart-heading .eyebrow {
+            color: #8b9d94;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .cart-heading h1 {
+            font-size: 34px;
+            font-weight: 800;
+            color: #183b36;
+            margin: 0 0 12px;
+        }
+
+        .cart-heading p {
+            color: #84958b;
+            font-size: 14px;
+            margin: 0;
+        }
+
+    .cart-breadcrumb {
+        font-size: 13px;
+        color: #91a198;
+        margin-bottom: 28px;
+    }
+
+        .cart-breadcrumb a {
+            color: #39766b;
+            text-decoration: none;
+        }
+
+            .cart-breadcrumb a:hover {
+                color: #183b36;
+            }
+
+    .cart-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 350px;
+        gap: 25px;
+        align-items: start;
+    }
+
+    .cart-products,
+    .cart-summary {
+        background: #fff;
+        border: 1px solid #e7eee9;
+        border-radius: 18px;
+        box-shadow: 0 8px 30px rgba(24, 59, 54, .045);
+    }
+
+    .cart-products {
+        padding: 25px;
+    }
+
+    .cart-section-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #edf1ed;
+    }
+
+        .cart-section-title h3 {
+            font-size: 17px;
+            font-weight: 800;
+            margin: 0;
+        }
+
+    .cart-count {
+        background: #edf5f0;
+        color: #39766b;
+        padding: 7px 13px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .cart-item {
+        display: grid;
+        grid-template-columns: 105px minmax(0, 1fr) 130px;
+        gap: 20px;
+        padding: 24px 0;
+        border-bottom: 1px solid #edf1ed;
+        align-items: center;
+    }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+    .cart-book-image {
+        width: 105px;
+        height: 140px;
+        object-fit: cover;
+        border-radius: 9px;
+        background: #f0f3ef;
+        box-shadow: 0 5px 14px rgba(0, 0, 0, .09);
+    }
+
+    .cart-book-info {
+        min-width: 0;
+    }
+
+        .cart-book-info h4 {
+            font-size: 16px;
+            line-height: 1.5;
+            font-weight: 800;
+            color: #183b36;
+            margin: 0 0 8px;
+        }
+
+    .cart-book-author {
+        color: #84958b;
+        font-size: 12px;
+        margin-bottom: 12px;
+    }
+
+    .cart-unit-price {
+        color: #39766b;
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    .cart-item-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 18px;
+    }
+
+    .cart-quantity-form {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+        .cart-quantity-form label {
+            color: #84958b;
+            font-size: 12px;
+        }
+
+    .cart-quantity-input {
+        width: 58px;
+        height: 35px;
+        text-align: center;
+        border: 1px solid #dce7df;
+        border-radius: 7px;
+        color: #183b36;
+        outline: none;
+        font-size: 13px;
+    }
+
+        .cart-quantity-input:focus {
+            border-color: #39766b;
+        }
+
+    .cart-update-btn {
+        height: 35px;
+        padding: 0 12px;
+        background: #edf5f0;
+        color: #39766b;
+        border: none;
+        border-radius: 7px;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s;
+    }
+
+        .cart-update-btn:hover {
+            background: #39766b;
+            color: #fff;
+        }
+
+    .cart-remove-btn {
+        background: transparent;
+        border: none;
+        color: #bd7770;
+        font-size: 12px;
+        cursor: pointer;
+        padding: 5px;
+    }
+
+        .cart-remove-btn:hover {
+            color: #a33f36;
+            text-decoration: underline;
+        }
+
+    .cart-item-total {
+        text-align: right;
+    }
+
+        .cart-item-total small {
+            display: block;
+            font-size: 11px;
+            color: #9aa79f;
+            margin-bottom: 7px;
+        }
+
+        .cart-item-total strong {
+            color: #183b36;
+            font-size: 16px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+    .cart-summary {
+        padding: 25px;
+        position: sticky;
+        top: 25px;
+    }
+
+        .cart-summary h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin: 0 0 23px;
+            padding-bottom: 17px;
+            border-bottom: 1px solid #edf1ed;
+        }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 17px;
+        font-size: 13px;
+        color: #84958b;
+    }
+
+        .summary-row strong {
+            color: #183b36;
+            font-weight: 700;
+            text-align: right;
+        }
+
+    .summary-total {
+        border-top: 1px dashed #dce7df;
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+
+        .summary-total span {
+            font-size: 15px;
+            color: #183b36;
+            font-weight: 800;
+        }
+
+        .summary-total strong {
+            font-size: 22px;
+            color: #39766b;
+            font-weight: 800;
+        }
+
+    .cart-shipping-note {
+        background: #f1f7f2;
+        border-radius: 10px;
+        padding: 13px;
+        margin: 22px 0;
+        color: #648276;
+        font-size: 11px;
+        line-height: 1.7;
+    }
+
+    .cart-checkout-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 49px;
+        background: #39766b;
+        color: #fff !important;
+        text-decoration: none !important;
+        border-radius: 9px;
+        font-size: 14px;
+        font-weight: 800;
+        transition: .25s;
+    }
+
+        .cart-checkout-btn:hover {
+            background: #183b36;
+            transform: translateY(-2px);
+        }
+
+    .cart-continue-btn {
+        display: block;
+        text-align: center;
+        margin-top: 17px;
+        color: #39766b;
+        font-size: 13px;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+        .cart-continue-btn:hover {
+            color: #183b36;
+        }
+
+    .cart-empty {
+        background: #fff;
+        border: 1px solid #e7eee9;
+        border-radius: 18px;
+        padding: 65px 20px;
+        text-align: center;
+        box-shadow: 0 8px 30px rgba(24, 59, 54, .04);
+    }
+
+    .cart-empty-icon {
+        width: 90px;
+        height: 90px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 22px;
+        background: #edf5f0;
+        color: #39766b;
+        border-radius: 50%;
+        font-size: 38px;
+    }
+
+    .cart-empty h3 {
+        font-size: 21px;
+        font-weight: 800;
+        margin-bottom: 10px;
+    }
+
+    .cart-empty p {
+        color: #84958b;
+        font-size: 13px;
+        margin-bottom: 25px;
+    }
+
+    .cart-message {
+        padding: 13px 17px;
+        border-radius: 9px;
+        background: #edf7ef;
+        color: #39766b;
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+
+    .cart-validation {
+        color: #bd514b;
+        font-size: 13px;
+        margin-bottom: 15px;
+    }
+
+    @@media (max-width: 900px) {
+        .cart-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .cart-summary {
+            position: static;
+        }
+    }
+
+    @@media (max-width: 600px) {
+        .cart-page {
+            padding: 35px 0 55px;
+        }
+
+        .cart-container {
+            width: 94%;
+        }
+
+        .cart-heading h1 {
+            font-size: 27px;
+        }
+
+        .cart-products {
+            padding: 16px;
+        }
+
+        .cart-item {
+            grid-template-columns: 78px minmax(0, 1fr);
+            gap: 13px;
+        }
+
+        .cart-book-image {
+            width: 78px;
+            height: 110px;
+        }
+
+        .cart-book-info h4 {
+            font-size: 14px;
+        }
+
+        .cart-item-total {
+            grid-column: 2;
+            text-align: left;
+            margin-top: -5px;
+        }
+
+            .cart-item-total small {
+                display: inline;
+                margin-right: 5px;
+            }
+    }
+</style>
+
+<div class="cart-page">
+    <div class="cart-container">
+
+        <div class="cart-heading">
+            <div class="eyebrow">SMARTBOOK BOOKSTORE</div>
+            <h1>Giỏ hàng của tôi</h1>
+            <p>Những cuốn sách bạn yêu thích đang chờ được khám phá.</p>
+        </div>
+
+        <div class="cart-breadcrumb">
+            <a href="@Url.Action("Index", "Home")">Trang chủ</a>
+            <span> / </span>
+            <span>Giỏ hàng của tôi</span>
+        </div>
+
+        @if (TempData["CartMessage"] != null)
+        {
+            <div class="cart-message">
+                <i class="glyphicon glyphicon-ok-circle"></i>
+                @TempData["CartMessage"]
+            </div>
+        }
+
+        @if (!cart.Any())
+        {
+            <div class="cart-empty">
+                <div class="cart-empty-icon">
+                    <i class="glyphicon glyphicon-shopping-cart"></i>
+                </div>
+
+                <h3>Giỏ hàng của bạn đang trống</h3>
+
+                <p>
+                    Có vẻ như bạn chưa chọn cuốn sách nào.
+                    Hãy khám phá thế giới tri thức tại SmartBook nhé!
+                </p>
+
+                <a href="@Url.Action("Index", "Products")"
+                   class="cart-checkout-btn"
+                   style="max-width:220px;margin:auto;">
+                    KHÁM PHÁ SÁCH
+                </a>
+            </div>
+        }
+        else
+        {
+            <div class="cart-layout">
+
+                <!-- DANH SACH SAN PHAM -->
+                <div class="cart-products">
+
+                    <div class="cart-section-title">
+                        <h3>Sản phẩm đã chọn</h3>
+                        <span class="cart-count">
+                            @totalQuantity sản phẩm
+                        </span>
+                    </div>
+
+                    @foreach (var item in cart)
+                    {
+                        <div class="cart-item">
+
+                            <div>
+                                @if (!string.IsNullOrWhiteSpace(item.ImageUrl))
+                                {
+                                    <img class="cart-book-image"
+                                         src="@Url.Content(item.ImageUrl)"
+                                         alt="@item.BookTitle"
+                                         onerror="this.style.display='none';" />
+                                }
+                                else
+                                {
+                                    <div class="cart-book-image"
+                                         style="display:flex;align-items:center;justify-content:center;color:#84958b;">
+                                        <i class="glyphicon glyphicon-book"
+                                           style="font-size:30px;"></i>
+                                    </div>
+                                }
+                            </div>
+
+                            <div class="cart-book-info">
+
+                                <h4>@item.BookTitle</h4>
+
+                                @if (!string.IsNullOrWhiteSpace(item.AuthorName))
+                                {
+                                    <div class="cart-book-author">
+                                        Tác giả: @item.AuthorName
+                                    </div>
+                                }
+
+                                <div class="cart-unit-price">
+                                    @item.UnitPrice.ToString("N0") đ
+                                </div>
+
+                                <div class="cart-item-actions">
+
+                                    @using (Html.BeginForm(
+                                        "Update",
+                                        "Cart",
+                                        FormMethod.Post,
+                                        new { @class = "cart-quantity-form" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@item.BookId" />
+
+                                        <label>Số lượng</label>
+
+                                        <input type="number"
+                                               name="quantity"
+                                               class="cart-quantity-input"
+                                               value="@item.Quantity"
+                                               min="1"
+                                               max="99"
+                                               required />
+
+                                        <button type="submit"
+                                                class="cart-update-btn">
+                                            Cập nhật
+                                        </button>
+                                    }
+
+                                    @using (Html.BeginForm(
+                                        "Remove",
+                                        "Cart",
+                                        FormMethod.Post,
+                                        new { style = "display:inline;" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="id"
+                                               value="@item.BookId" />
+
+                                        <button type="submit"
+                                                class="cart-remove-btn"
+                                                onclick="return confirm('Bạn có chắc muốn xóa sách này khỏi giỏ hàng?');">
+                                            <i class="glyphicon glyphicon-trash"></i>
+                                            Xóa
+                                        </button>
+                                    }
+
+                                </div>
+                            </div>
+
+                            <div class="cart-item-total">
+                                <small>Thành tiền</small>
+                                <strong>
+                                    @item.LineTotal.ToString("N0") đ
+                                </strong>
+                            </div>
+
+                        </div>
+                    }
+
+                </div>
+
+                <!-- TONG KET DON HANG -->
+                <aside class="cart-summary">
+
+                    <h3>Tóm tắt đơn hàng</h3>
+
+                    <div class="summary-row">
+                        <span>Số lượng sản phẩm</span>
+                        <strong>@totalQuantity</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Tạm tính</span>
+                        <strong>@subtotal.ToString("N0") đ</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Phí vận chuyển</span>
+                        <strong>Miễn phí</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Giảm giá</span>
+                        <strong>0 đ</strong>
+                    </div>
+
+                    <div class="summary-row summary-total">
+                        <span>Tổng cộng</span>
+                        <strong>@subtotal.ToString("N0") đ</strong>
+                    </div>
+
+                    <div class="cart-shipping-note">
+                        <i class="glyphicon glyphicon-leaf"></i>
+                        Cảm ơn bạn đã lựa chọn SmartBook.
+                        Đơn hàng sẽ được xử lý sau khi bạn xác nhận thông tin
+                        giao hàng.
+                    </div>
+
+                    <a href="@Url.Action("Checkout", "Orders")"
+                       class="cart-checkout-btn">
+                        TIẾN HÀNH ĐẶT HÀNG
+                        <i class="glyphicon glyphicon-arrow-right"
+                           style="margin-left:10px;"></i>
+                    </a>
+
+                    <a href="@Url.Action("Index", "Products")"
+                       class="cart-continue-btn">
+                        <i class="glyphicon glyphicon-arrow-left"></i>
+                        Tiếp tục mua sắm
+                    </a>
+
+                </aside>
+
+            </div>
+        }
+
+    </div>
+</div>

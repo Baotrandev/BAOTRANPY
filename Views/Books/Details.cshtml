@@ -1,0 +1,139 @@
+﻿@model SmartBook.Models.book
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>book</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.ISBN)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ISBN)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.book_title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.book_title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.description)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.description)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.publication_date)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.publication_date)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.page_count)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.page_count)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.language)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.language)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.book_format)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.book_format)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cover_image_url)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cover_image_url)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.original_price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.original_price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.sale_price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.sale_price)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.created_at)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.created_at)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.updated_at)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.updated_at)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.category.category_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.category.category_name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.publisher.publisher_name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.publisher.publisher_name)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.book_id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

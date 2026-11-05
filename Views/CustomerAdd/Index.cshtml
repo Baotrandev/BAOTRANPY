@@ -1,0 +1,82 @@
+﻿@model IEnumerable<SmartBook.Models.customer_addresses>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.recipient_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.province)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.district)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ward)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.street_address)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.is_default)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.created_at)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.customer.full_name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.recipient_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.province)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.district)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ward)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.street_address)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.is_default)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.created_at)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.customer.full_name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.address_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.address_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.address_id })
+        </td>
+    </tr>
+}
+
+</table>

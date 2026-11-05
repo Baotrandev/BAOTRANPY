@@ -1,0 +1,646 @@
+﻿@model IEnumerable<SmartBook.Models.book>
+
+@{
+    ViewBag.Title = "Giới thiệu - SmartBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .about-page {
+        font-family: 'Be Vietnam Pro', sans-serif;
+        color: #354b3d;
+        background: #f7f6ef;
+        overflow: hidden;
+    }
+
+    .about-page * {
+        box-sizing: border-box;
+    }
+
+    .about-container {
+        width: 90%;
+        max-width: 1200px;
+        margin: auto;
+    }
+
+    /* HERO */
+    .about-hero {
+        min-height: 530px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        background:
+            linear-gradient(90deg,
+                rgba(24, 48, 35, .88),
+                rgba(24, 48, 35, .35)),
+            url('@Url.Content("~/Images/nen.jpg")') center/cover no-repeat;
+        border-radius: 0 0 35px 35px;
+    }
+
+    .about-hero-content {
+        max-width: 650px;
+        padding: 80px 0;
+        color: white;
+    }
+
+    .about-label {
+        display: inline-block;
+        padding: 9px 18px;
+        border: 1px solid rgba(255,255,255,.6);
+        border-radius: 30px;
+        font-size: 12px;
+        letter-spacing: 2px;
+        margin-bottom: 22px;
+    }
+
+    .about-hero h1 {
+        font-size: 52px;
+        line-height: 1.25;
+        font-weight: 800;
+        margin-bottom: 22px;
+    }
+
+    .about-hero p {
+        font-size: 17px;
+        line-height: 1.9;
+        color: #f2eee4;
+        margin-bottom: 30px;
+    }
+
+    .about-btn {
+        display: inline-block;
+        padding: 14px 28px;
+        background: #d5c39c;
+        color: #354b3d;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: 700;
+        transition: .3s;
+    }
+
+    .about-btn:hover {
+        background: white;
+        color: #354b3d;
+        transform: translateY(-3px);
+        text-decoration: none;
+    }
+
+    /* INTRO */
+    .about-intro {
+        padding: 85px 0;
+    }
+
+    .about-intro-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        gap: 55px;
+    }
+
+    .about-image {
+        position: relative;
+    }
+
+    .about-image img {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 25px;
+        box-shadow: 0 15px 35px rgba(0,0,0,.1);
+    }
+
+    .about-image-note {
+        position: absolute;
+        right: -15px;
+        bottom: 20px;
+        background: #d5c39c;
+        color: #354b3d;
+        padding: 18px 25px;
+        border-radius: 15px;
+        font-weight: 700;
+    }
+
+    .section-label {
+        color: #879779;
+        font-size: 13px;
+        font-weight: 800;
+        letter-spacing: 3px;
+        margin-bottom: 15px;
+    }
+
+    .about-intro h2,
+    .quote-section h2,
+    .featured-section h2 {
+        font-size: 35px;
+        font-weight: 800;
+        line-height: 1.4;
+        margin-bottom: 20px;
+    }
+
+    .about-intro p {
+        color: #6d766c;
+        font-size: 15px;
+        line-height: 2;
+        margin-bottom: 15px;
+    }
+
+    /* VALUES */
+    .about-values {
+        padding: 65px 0;
+        background: #e9eee5;
+    }
+
+    .values-heading {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 25px;
+    }
+
+    .value-card {
+        background: #fffefa;
+        padding: 35px 25px;
+        border-radius: 20px;
+        text-align: center;
+        transition: .3s;
+    }
+
+    .value-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 12px 25px rgba(0,0,0,.07);
+    }
+
+    .value-icon {
+        width: 65px;
+        height: 65px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #e9eee5;
+        color: #536d55;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        font-size: 26px;
+    }
+
+    .value-card h3 {
+        font-size: 19px;
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .value-card p {
+        color: #778074;
+        font-size: 14px;
+        line-height: 1.8;
+        margin: 0;
+    }
+
+    /* QUOTES */
+    .quote-section {
+        padding: 85px 0;
+        text-align: center;
+    }
+
+    .quote-section h2 {
+        margin-bottom: 40px;
+    }
+
+    .quote-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+    }
+
+    .quote-card {
+        padding: 35px 25px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 8px 25px rgba(0,0,0,.04);
+    }
+
+    .quote-mark {
+        font-family: Georgia, serif;
+        font-size: 55px;
+        color: #c6b58f;
+        line-height: 1;
+    }
+
+    .quote-card p {
+        font-family: Georgia, serif;
+        font-size: 19px;
+        font-style: italic;
+        line-height: 1.7;
+        color: #4e6250;
+        min-height: 100px;
+    }
+
+    .quote-card span {
+        font-size: 12px;
+        color: #9a987f;
+        letter-spacing: 1px;
+        font-weight: 700;
+    }
+
+    /* FEATURED BOOKS */
+    .featured-section {
+        padding: 80px 0;
+        background: #e9eee5;
+    }
+
+    .featured-heading {
+        text-align: center;
+        margin-bottom: 40px;
+    }
+
+    .featured-heading p {
+        color: #788276;
+        line-height: 1.8;
+    }
+
+    .featured-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 22px;
+    }
+
+    .featured-card {
+        background: #fffefa;
+        border-radius: 18px;
+        padding: 15px;
+        transition: .3s;
+        overflow: hidden;
+    }
+
+    .featured-card:hover {
+        transform: translateY(-7px);
+        box-shadow: 0 12px 25px rgba(0,0,0,.08);
+    }
+
+    .featured-image {
+        height: 245px;
+        background: #f0eee5;
+        border-radius: 13px;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .featured-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        transition: .4s;
+    }
+
+    .featured-card:hover .featured-image img {
+        transform: scale(1.05);
+    }
+
+    .featured-card h3 {
+        font-size: 16px;
+        font-weight: 800;
+        line-height: 1.5;
+        margin: 18px 0 10px;
+        min-height: 48px;
+    }
+
+    .featured-price {
+        color: #71865e;
+        font-size: 18px;
+        font-weight: 800;
+        margin-bottom: 15px;
+    }
+
+    .featured-link {
+        display: block;
+        text-align: center;
+        padding: 11px;
+        background: #536d55;
+        color: white;
+        text-decoration: none;
+        border-radius: 25px;
+        font-size: 13px;
+        font-weight: 700;
+        transition: .3s;
+    }
+
+    .featured-link:hover {
+        background: #354b3d;
+        color: white;
+        text-decoration: none;
+    }
+
+    .featured-empty {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 30px;
+        color: #788276;
+    }
+
+    /* BOTTOM BANNER */
+    .about-bottom {
+        padding: 75px 20px;
+        text-align: center;
+        background: #354b3d;
+        color: white;
+    }
+
+    .about-bottom h2 {
+        font-size: 32px;
+        font-weight: 800;
+        margin-bottom: 15px;
+    }
+
+    .about-bottom p {
+        color: #e0e5d9;
+        margin-bottom: 25px;
+        line-height: 1.8;
+    }
+
+    /* RESPONSIVE */
+    @@media (max-width: 900px) {
+        .about-intro-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .featured-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .quote-grid,
+        .values-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .about-hero h1 {
+            font-size: 38px;
+        }
+    }
+
+    @@media (max-width: 550px) {
+        .featured-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .about-hero h1 {
+            font-size: 31px;
+        }
+
+        .about-intro h2,
+        .quote-section h2,
+        .featured-section h2 {
+            font-size: 27px;
+        }
+
+        .about-image-note {
+            right: 5px;
+        }
+    }
+</style>
+
+<div class="about-page">
+
+    <!-- 1. BANNER GIỚI THIỆU -->
+    <section class="about-hero">
+        <div class="about-container">
+            <div class="about-hero-content">
+
+                <span class="about-label">
+                    CHÀO MỪNG ĐẾN VỚI SMARTBOOK
+                </span>
+
+                <h1>
+                    Mỗi trang sách,<br />
+                    một hành trình mới.
+                </h1>
+
+                <p>
+                    SmartBook là không gian dành cho những tâm hồn yêu sách,
+                    nơi tri thức được sẻ chia và những ý tưởng mới được khơi nguồn.
+                </p>
+
+                <a href="@Url.Action("Index", "Products")" class="about-btn">
+                    KHÁM PHÁ SÁCH →
+                </a>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 2. VỀ SMARTBOOK -->
+    <section class="about-intro">
+        <div class="about-container">
+            <div class="about-intro-grid">
+
+                <div class="about-image">
+                    <img src="@Url.Content("~/Images/ai.jpg")"
+                         alt="Không gian đọc sách SmartBook" />
+
+                    <div class="about-image-note">
+                        Read more. Dream more.
+                    </div>
+                </div>
+
+                <div>
+                    <div class="section-label">OUR STORY</div>
+
+                    <h2>
+                        Không chỉ là một nhà sách,
+                        mà còn là người bạn đồng hành.
+                    </h2>
+
+                    <p>
+                        SmartBook được xây dựng với mong muốn mang đến
+                        cho độc giả một không gian mua sắm sách tiện lợi,
+                        thân thiện và giàu cảm hứng.
+                    </p>
+
+                    <p>
+                        Từ văn học, kỹ năng sống, sách thiếu nhi đến
+                        công nghệ và giáo dục, chúng tôi mong muốn giúp
+                        mỗi độc giả dễ dàng tìm thấy cuốn sách phù hợp
+                        với sở thích và mục tiêu của mình.
+                    </p>
+
+                    <p>
+                        Bởi chúng tôi tin rằng một cuốn sách hay có thể
+                        mở ra một góc nhìn mới và tạo nên những thay đổi
+                        tích cực trong cuộc sống.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 3. GIA TRI COT LOI -->
+    <section class="about-values">
+        <div class="about-container">
+
+            <div class="values-heading">
+                <div class="section-label">OUR VALUES</div>
+                <h2>Điều SmartBook luôn hướng đến</h2>
+            </div>
+
+            <div class="values-grid">
+
+                <div class="value-card">
+                    <div class="value-icon">📚</div>
+                    <h3>Tri thức chất lượng</h3>
+                    <p>
+                        Mang đến nhiều đầu sách đa dạng,
+                        giúp độc giả học hỏi và phát triển mỗi ngày.
+                    </p>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">💚</div>
+                    <h3>Trải nghiệm thân thiện</h3>
+                    <p>
+                        Giao diện dễ sử dụng, tìm kiếm nhanh chóng
+                        và hỗ trợ lựa chọn sách thuận tiện.
+                    </p>
+                </div>
+
+                <div class="value-card">
+                    <div class="value-icon">✨</div>
+                    <h3>Lan tỏa cảm hứng</h3>
+                    <p>
+                        Khuyến khích thói quen đọc sách và
+                        nuôi dưỡng tinh thần học tập suốt đời.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 4. GOC TRICH DAN -->
+    <section class="quote-section">
+        <div class="about-container">
+
+            <div class="section-label">BOOK INSPIRATION</div>
+            <h2>Góc nhỏ dành cho người yêu sách</h2>
+
+            <div class="quote-grid">
+
+                <div class="quote-card">
+                    <div class="quote-mark">“</div>
+                    <p>
+                        Một cuốn sách hay có thể mở ra
+                        cánh cửa đến một thế giới chưa từng biết.
+                    </p>
+                    <span>GÓC ĐỌC SMARTBOOK</span>
+                </div>
+
+                <div class="quote-card">
+                    <div class="quote-mark">“</div>
+                    <p>
+                        Mỗi trang sách là một cơ hội để
+                        hiểu thêm về thế giới và chính mình.
+                    </p>
+                    <span>GÓC ĐỌC SMARTBOOK</span>
+                </div>
+
+                <div class="quote-card">
+                    <div class="quote-mark">“</div>
+                    <p>
+                        Đọc sách hôm nay, gieo những hạt giống
+                        cho ước mơ của ngày mai.
+                    </p>
+                    <span>GÓC ĐỌC SMARTBOOK</span>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 5. SACH DAC SAC -->
+    <section class="featured-section">
+        <div class="about-container">
+
+            <div class="featured-heading">
+                <div class="section-label">FEATURED BOOKS</div>
+                <h2>Những cuốn sách đặc sắc</h2>
+                <p>
+                    Khám phá những lựa chọn nổi bật được giới thiệu
+                    từ bộ sưu tập sách của SmartBook.
+                </p>
+            </div>
+
+            <div class="featured-grid">
+
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var book in Model)
+                    {
+                        <div class="featured-card">
+
+                            <div class="featured-image">
+                                @if (!string.IsNullOrWhiteSpace(book.cover_image_url))
+                                {
+                                    <img src="@Url.Content(book.cover_image_url)"
+                                         alt="@book.book_title" />
+                                }
+                                else
+                                {
+                                    <img src="@Url.Content("~/Images/nen.jpg")"
+                                         alt="Ảnh sách SmartBook" />
+                                }
+                            </div>
+
+                            <h3>@book.book_title</h3>
+
+                            <div class="featured-price">
+                                @book.sale_price.ToString("N0") đ
+                            </div>
+
+                            <a href="@Url.Action("Index", "Products")"
+                               class="featured-link">
+                                KHÁM PHÁ SÁCH
+                            </a>
+
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="featured-empty">
+                        Hiện chưa có sách nổi bật để hiển thị.
+                    </div>
+                }
+
+            </div>
+        </div>
+    </section>
+
+
+    <!-- 6. LỜI KET -->
+    <section class="about-bottom">
+        <div class="about-container">
+
+            <h2>Mở trang sách, mở tương lai.</h2>
+
+            <p>
+                Hãy để SmartBook đồng hành cùng bạn trên hành trình
+                khám phá tri thức và nuôi dưỡng những ước mơ.
+            </p>
+
+            <a href="@Url.Action("Index", "Products")" class="about-btn">
+                BẮT ĐẦU KHÁM PHÁ →
+            </a>
+
+        </div>
+    </section>
+
+</div>

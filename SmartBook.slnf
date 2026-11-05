@@ -1,0 +1,8 @@
+{
+  "solution": {
+    "path": "..\\SmartBook.slnx",
+    "projects": [
+      "SmartBook\\SmartBook.csproj"
+    ]
+  }
+}

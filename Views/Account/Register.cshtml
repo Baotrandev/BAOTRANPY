@@ -1,0 +1,232 @@
+﻿
+@model SmartBook.ViewModels.RegisterViewModel
+
+@{
+    ViewBag.Title = "Đăng ký tài khoản - SmartBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .account-page {
+        min-height: 80vh;
+        background: #f7faf8;
+        padding: 55px 15px;
+        font-family: 'Be Vietnam Pro', sans-serif;
+        color: #294b40;
+    }
+
+    .account-card {
+        max-width: 540px;
+        margin: auto;
+        background: white;
+        padding: 38px;
+        border: 1px solid #e3ece6;
+        border-radius: 20px;
+        box-shadow: 0 10px 35px rgba(35,75,60,.07);
+    }
+
+    .account-heading {
+        text-align: center;
+        margin-bottom: 28px;
+    }
+
+        .account-heading i {
+            color: #39766b;
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .account-heading h1 {
+            color: #183b36;
+            font-size: 27px;
+            font-weight: 900;
+        }
+
+        .account-heading p {
+            color: #84958b;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+    .account-group {
+        margin-bottom: 17px;
+    }
+
+        .account-group label {
+            display: block;
+            color: #31584b;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+    .account-input {
+        width: 100%;
+        height: 47px;
+        border: 1px solid #dce9e0;
+        border-radius: 9px;
+        padding: 10px 14px;
+        outline: none;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+        .account-input:focus {
+            border-color: #39766b;
+            box-shadow: 0 0 0 3px rgba(57,118,107,.1);
+        }
+
+    .account-validation {
+        color: #c45b42;
+        font-size: 12px;
+        margin-top: 5px;
+        display: block;
+    }
+
+    .account-error {
+        background: #fff0ed;
+        color: #b94e40;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .account-success {
+        background: #e9f5ed;
+        color: #28734f;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .account-submit {
+        width: 100%;
+        border: none;
+        border-radius: 9px;
+        background: #39766b;
+        color: white;
+        padding: 14px;
+        font-weight: 800;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: .2s;
+    }
+
+        .account-submit:hover {
+            background: #234e43;
+            transform: translateY(-2px);
+        }
+
+    .account-switch {
+        text-align: center;
+        color: #84958b;
+        font-size: 13px;
+        margin-top: 23px;
+    }
+
+        .account-switch a {
+            color: #39766b;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+    @@media(max-width: 550px) {
+        .account-card {
+            padding: 25px 20px;
+        }
+    }
+</style>
+
+<div class="account-page">
+    <div class="account-card">
+
+        <div class="account-heading">
+            <i class="fa-solid fa-user-plus"></i>
+            <h1>Tạo tài khoản</h1>
+            <p>Tham gia SmartBook để lưu giữ những cuốn sách yêu thích.</p>
+        </div>
+
+        @if (TempData["Success"] != null)
+        {
+            <div class="account-success">
+                <i class="fa-solid fa-circle-check"></i>
+                @TempData["Success"]
+            </div>
+        }
+
+        @using (Html.BeginForm("Register", "Account", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(false, "", new { @class = "account-error" })
+
+            <div class="account-group">
+                @Html.LabelFor(x => x.full_name, "Họ và tên")
+                @Html.TextBoxFor(x => x.full_name, new
+                {
+                    @class = "account-input",
+                    placeholder = "Nhập họ và tên của bạn"
+                })
+                @Html.ValidationMessageFor(x => x.full_name, "", new
+                {
+                    @class = "account-validation"
+                })
+            </div>
+
+            <div class="account-group">
+                @Html.LabelFor(x => x.email, "Địa chỉ email")
+                @Html.TextBoxFor(x => x.email, new
+                {
+                    @class = "account-input",
+                    placeholder = "example@email.com",
+                    type = "email"
+                })
+                @Html.ValidationMessageFor(x => x.email, "", new
+                {
+                    @class = "account-validation"
+                })
+            </div>
+
+            <div class="account-group">
+                @Html.LabelFor(x => x.phone, "Số điện thoại")
+                @Html.TextBoxFor(x => x.phone, new
+                {
+                    @class = "account-input",
+                    placeholder = "Nhập số điện thoại",
+                    type = "tel"
+                })
+                @Html.ValidationMessageFor(x => x.phone, "", new
+                {
+                    @class = "account-validation"
+                })
+            </div>
+
+            <div class="account-group">
+                @Html.LabelFor(x => x.password, "Mật khẩu")
+                @Html.PasswordFor(x => x.password, new
+                {
+                    @class = "account-input",
+                    placeholder = "Tạo mật khẩu"
+                })
+                @Html.ValidationMessageFor(x => x.password, "", new
+                {
+                    @class = "account-validation"
+                })
+            </div>
+
+            <button type="submit" class="account-submit">
+                <i class="fa-solid fa-user-check"></i>
+                ĐĂNG KÝ TÀI KHOẢN
+            </button>
+        }
+
+        <div class="account-switch">
+            Đã có tài khoản?
+            <a href="@Url.Action("Login", "Account")">Đăng nhập ngay</a>
+        </div>
+
+    </div>
+</div>

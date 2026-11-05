@@ -1,0 +1,592 @@
+﻿
+@model SmartBook.Models.BookDetailsViewModel
+
+
+@{
+    ViewBag.Title = Model.Book.book_title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var book = Model.Book;
+
+    var bookImage = book.cover_image_url;
+
+    if (!string.IsNullOrWhiteSpace(bookImage))
+    {
+        bookImage = bookImage.Trim();
+
+        if (!bookImage.StartsWith("http://")
+            && !bookImage.StartsWith("https://")
+            && !bookImage.StartsWith("~/")
+            && !bookImage.StartsWith("/"))
+        {
+            bookImage = bookImage.StartsWith("Images/",
+                StringComparison.OrdinalIgnoreCase)
+                ? "~/" + bookImage
+                : "~/Images/" + bookImage;
+        }
+    }
+}
+
+<style>
+    .detail-page {
+        font-family: 'Be Vietnam Pro', sans-serif;
+        color: #294b40;
+        background: #f7faf8;
+        padding: 35px 0 65px;
+    }
+
+    .detail-breadcrumb {
+        margin-bottom: 25px;
+        color: #84958b;
+        font-size: 13px;
+    }
+
+        .detail-breadcrumb a {
+            color: #39766b;
+            text-decoration: none;
+        }
+
+    .detail-main {
+        display: grid;
+        grid-template-columns: 390px 1fr;
+        gap: 45px;
+        background: white;
+        border: 1px solid #e3ece6;
+        border-radius: 20px;
+        padding: 35px;
+        box-shadow: 0 8px 30px rgba(35, 75, 60, .05);
+    }
+
+    .detail-image-box {
+        background: #f1f7f3;
+        border-radius: 16px;
+        min-height: 440px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 25px;
+    }
+
+    .detail-image {
+        width: 100%;
+        max-height: 410px;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+
+    .detail-info {
+        padding: 10px 0;
+    }
+
+    .detail-category {
+        display: inline-block;
+        background: #e9f3ed;
+        color: #39766b;
+        padding: 7px 14px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
+
+    .detail-title {
+        color: #183b36;
+        font-size: 30px;
+        line-height: 1.4;
+        font-weight: 900;
+        margin-bottom: 18px;
+    }
+
+    .detail-description {
+        color: #718078;
+        font-size: 14px;
+        line-height: 1.9;
+        margin: 20px 0;
+    }
+
+    .detail-price {
+        color: #c45b42;
+        font-size: 30px;
+        font-weight: 900;
+        margin: 20px 0;
+    }
+
+    .detail-meta {
+        border-top: 1px solid #edf1ee;
+        border-bottom: 1px solid #edf1ee;
+        padding: 18px 0;
+        margin: 20px 0;
+    }
+
+        .detail-meta p {
+            margin: 8px 0;
+            color: #687a70;
+            font-size: 13px;
+        }
+
+        .detail-meta strong {
+            color: #31584b;
+            display: inline-block;
+            min-width: 135px;
+        }
+
+    .detail-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 25px;
+    }
+
+    .detail-quantity {
+        width: 75px;
+        height: 46px;
+        border: 1px solid #dce9e0;
+        border-radius: 8px;
+        padding: 8px;
+        text-align: center;
+    }
+
+    .detail-cart-btn {
+        border: none;
+        border-radius: 9px;
+        padding: 13px 23px;
+        background: #39766b;
+        color: white;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .25s;
+    }
+
+        .detail-cart-btn:hover {
+            background: #234e43;
+            transform: translateY(-2px);
+        }
+
+    .detail-back {
+        color: #39766b;
+        font-weight: 700;
+        text-decoration: none;
+        padding: 12px 18px;
+    }
+
+    /* PHẦN TÁC GIẢ */
+
+    .detail-section {
+        margin-top: 45px;
+    }
+
+    .detail-section-title {
+        color: #183b36;
+        font-size: 25px;
+        font-weight: 900;
+        margin-bottom: 22px;
+    }
+
+    .author-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .author-card {
+        display: flex;
+        gap: 22px;
+        align-items: center;
+        background: white;
+        border: 1px solid #e3ece6;
+        border-radius: 16px;
+        padding: 22px;
+    }
+
+    .author-image {
+        width: 125px;
+        height: 145px;
+        flex-shrink: 0;
+        object-fit: cover;
+        border-radius: 12px;
+        background: #edf4ef;
+    }
+
+    .author-no-image {
+        width: 125px;
+        height: 145px;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: #edf4ef;
+        border-radius: 12px;
+        color: #77958a;
+        font-size: 35px;
+    }
+
+    .author-name {
+        color: #28574d;
+        font-size: 18px;
+        font-weight: 900;
+        margin-bottom: 8px;
+    }
+
+    .author-nationality {
+        color: #a18b5c;
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .author-bio {
+        color: #718078;
+        font-size: 12px;
+        line-height: 1.8;
+    }
+
+    /* TRÍCH ĐOẠN */
+
+    .excerpt-section {
+        background: linear-gradient(135deg, #183b36, #39766b);
+        border-radius: 20px;
+        padding: 38px;
+        margin-top: 45px;
+    }
+
+        .excerpt-section .detail-section-title {
+            color: white;
+        }
+
+    .excerpt-card {
+        background: rgba(255,255,255,.10);
+        border: 1px solid rgba(255,255,255,.16);
+        border-radius: 13px;
+        padding: 25px;
+        margin-bottom: 15px;
+    }
+
+    .excerpt-icon {
+        color: #f5d88b;
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+
+    .excerpt-text {
+        color: white;
+        font-size: 15px;
+        line-height: 2;
+        font-style: italic;
+        white-space: pre-line;
+    }
+
+    .excerpt-note {
+        color: #f5d88b;
+        font-size: 12px;
+        margin-top: 15px;
+    }
+
+    .detail-empty {
+        background: white;
+        border: 1px dashed #cbded2;
+        padding: 25px;
+        border-radius: 12px;
+        color: #81938a;
+        text-align: center;
+    }
+
+    @@media(max-width: 850px) {
+        .detail-main {
+            grid-template-columns: 1fr;
+        }
+
+        .detail-image-box {
+            min-height: 320px;
+        }
+
+        .detail-image {
+            max-height: 320px;
+        }
+
+        .author-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @@media(max-width: 550px) {
+        .detail-main {
+            padding: 18px;
+        }
+
+        .detail-title {
+            font-size: 23px;
+        }
+
+        .author-card {
+            align-items: flex-start;
+            padding: 15px;
+            gap: 13px;
+        }
+
+        .author-image,
+        .author-no-image {
+            width: 90px;
+            height: 110px;
+        }
+
+        .excerpt-section {
+            padding: 22px;
+        }
+    }
+</style>
+
+<div class="detail-page">
+    <div class="container">
+
+        <!-- ĐƯỜNG DẪN -->
+        <div class="detail-breadcrumb">
+            <a href="@Url.Action("Index", "Home")">Trang chủ</a>
+            <i class="fa-solid fa-angle-right"></i>
+            <a href="@Url.Action("Index", "Products")">Sách</a>
+            <i class="fa-solid fa-angle-right"></i>
+            @book.book_title
+        </div>
+
+        <!-- THÔNG TIN SÁCH -->
+        <section class="detail-main">
+
+            <div class="detail-image-box">
+                @if (!string.IsNullOrWhiteSpace(bookImage))
+                {
+                    <img src="@Url.Content(bookImage)"
+                         alt="@book.book_title"
+                         class="detail-image"
+                         onerror="this.style.display='none';" />
+                }
+                else
+                {
+                    <i class="fa-solid fa-book-open"
+                       style="font-size:65px;color:#9cb8a8;"></i>
+                }
+            </div>
+
+            <div class="detail-info">
+
+                @if (book.category != null)
+                {
+                    <span class="detail-category">
+                        <i class="fa-solid fa-layer-group"></i>
+                        @book.category.category_name
+                    </span>
+                }
+
+                <h1 class="detail-title">
+                    @book.book_title
+                </h1>
+
+                <div class="detail-description">
+                    @if (!string.IsNullOrWhiteSpace(book.description))
+                    {
+                        @book.description
+                    }
+                    else
+                    {
+                        <span>Thông tin giới thiệu sách đang được cập nhật.</span>
+                    }
+                </div>
+
+                <div class="detail-price">
+                    @book.sale_price.ToString("N0") ₫
+                </div>
+
+                <div class="detail-meta">
+
+                    <p>
+                        <strong>ISBN:</strong>
+                        @(string.IsNullOrWhiteSpace(book.ISBN)
+                            ? "Đang cập nhật"
+                            : book.ISBN)
+                    </p>
+
+                    <p>
+                        <strong>Nhà xuất bản:</strong>
+                        @(book.publisher == null
+                            ? "Đang cập nhật"
+                            : book.publisher.publisher_name)
+                    </p>
+
+                    <p>
+                        <strong>Ngày xuất bản:</strong>
+                        @(book.publication_date.HasValue
+                            ? book.publication_date.Value.ToString("dd/MM/yyyy")
+                            : "Đang cập nhật")
+                    </p>
+
+                    <p>
+                        <strong>Số trang:</strong>
+                        @(book.page_count.HasValue
+                            ? book.page_count.Value.ToString()
+                            : "Đang cập nhật")
+                    </p>
+
+                    <p>
+                        <strong>Ngôn ngữ:</strong>
+                        @(string.IsNullOrWhiteSpace(book.language)
+                            ? "Đang cập nhật"
+                            : book.language)
+                    </p>
+
+                    <p>
+                        <strong>Hình thức:</strong>
+                        @(string.IsNullOrWhiteSpace(book.book_format)
+                            ? "Đang cập nhật"
+                            : book.book_format)
+                    </p>
+
+                </div>
+
+                <!-- THÊM VÀO GIỎ HÀNG -->
+                <div class="detail-actions">
+
+                    @using (Html.BeginForm("Add", "Cart", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.Hidden("id", book.book_id)
+
+                        <input type="number"
+                               name="quantity"
+                               value="1"
+                               min="1" />
+
+                        <button type="submit">
+                            <i class="fa-solid fa-cart-plus"></i>
+                            Thêm vào giỏ hàng
+                        </button>
+                    }
+
+                    <a href="@Url.Action("Index", "Products")"
+                       class="detail-back">
+                        <i class="fa-solid fa-arrow-left"></i>
+                        Quay lại
+                    </a>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- THÔNG TIN TÁC GIẢ -->
+        <section class="detail-section">
+
+            <h2 class="detail-section-title">
+                <i class="fa-solid fa-feather-pointed"></i>
+                Tác giả của cuốn sách
+            </h2>
+
+            @if (Model.Authors != null && Model.Authors.Any())
+            {
+                <div class="author-grid">
+
+
+                    @if (Model.Authors != null && Model.Authors.Any())
+                    {
+                        <div class="author-grid">
+                            @foreach (var author in Model.Authors)
+                            {
+                                <div class="author-card">
+
+                                    @if (!string.IsNullOrWhiteSpace(author.ImageUrl))
+                                    {
+                                        <img src="@Url.Content(author.ImageUrl)"
+                                             alt="@author.AuthorName"
+                                             class="author-image"
+                                             onerror="this.style.display='none';" />
+                                    }
+                                    else
+                                    {
+                                        <div class="author-no-image">
+                                            <i class="fa-solid fa-user-pen"></i>
+                                        </div>
+                                    }
+
+                                    <div class="author-info">
+                                        <h3 class="author-name">
+                                            @author.AuthorName
+                                        </h3>
+
+                                        @if (!string.IsNullOrWhiteSpace(author.Nationality))
+                                        {
+                                            <div class="author-nationality">
+                                                @author.Nationality
+                                            </div>
+                                        }
+
+                                        <p class="author-bio">
+                                            @(string.IsNullOrWhiteSpace(author.Biography)
+                            ? "Thông tin tiểu sử tác giả đang được cập nhật."
+                            : author.Biography)
+                                        </p>
+                                    </div>
+
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="empty-author">
+                            Chưa có thông tin tác giả cho cuốn sách này.
+                        </div>
+                    }
+
+                </div>
+            }
+            else
+            {
+                <div class="detail-empty">
+                    Chưa có thông tin tác giả cho cuốn sách này.
+                </div>
+            }
+
+        </section>
+
+        <!-- TRÍCH ĐOẠN SÁCH -->
+        <section class="excerpt-section">
+
+            <h2 class="detail-section-title">
+                <i class="fa-solid fa-quote-left"></i>
+                Những trang sách đáng nhớ
+            </h2>
+
+            @if (Model.Excerpts != null && Model.Excerpts.Any())
+            {
+                foreach (var excerpt in Model.Excerpts)
+                {
+                    <div class="excerpt-card">
+
+                        <div class="excerpt-icon">
+                            <i class="fa-solid fa-quote-left"></i>
+                        </div>
+
+                        <div class="excerpt-text">
+                            @excerpt.ExcerptText
+                        </div>
+
+                        @if (!string.IsNullOrWhiteSpace(excerpt.SourceNote))
+                        {
+                            <div class="excerpt-note">
+                                — @excerpt.SourceNote
+                            </div>
+                        }
+
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="detail-empty">
+                    Những trích đoạn nổi bật của cuốn sách đang được cập nhật.
+                </div>
+            }
+
+        </section>
+
+    </div>
+</div>

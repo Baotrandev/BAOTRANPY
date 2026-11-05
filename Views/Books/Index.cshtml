@@ -1,0 +1,118 @@
+﻿@model IEnumerable<SmartBook.Models.book>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ISBN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.book_title)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.publication_date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.page_count)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.language)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.book_format)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cover_image_url)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.original_price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.sale_price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.status)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.created_at)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.updated_at)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.category.category_name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.publisher.publisher_name)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ISBN)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.book_title)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.publication_date)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.page_count)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.language)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.book_format)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cover_image_url)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.original_price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.sale_price)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.status)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.created_at)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.updated_at)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.category.category_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.publisher.publisher_name)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.book_id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.book_id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.book_id })
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,544 @@
+﻿
+/* =========================================
+   SMARTBOOK - PREMIUM HEADER
+========================================= */
+
+:root {
+    --sb-green: #315e50;
+    --sb-green-dark: #203f36;
+    --sb-green-light: #eaf1ec;
+    --sb-cream: #faf8f2;
+    --sb-text: #263d35;
+    --sb-muted: #829087;
+    --sb-gold: #c9a96e;
+    --sb-border: #e8ede8;
+}
+
+/* TOP BAR */
+
+.top-bar {
+    background: var(--sb-green-dark);
+    color: #f4f1e8;
+    padding: 9px 0;
+    font-size: 11px;
+    letter-spacing: .25px;
+}
+
+.top-bar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+    .top-bar-inner span {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+    }
+
+    .top-bar-inner i {
+        color: #d8c18e;
+    }
+
+/* HEADER */
+
+.main-header {
+    background: #fff;
+    position: relative;
+    z-index: 100;
+    box-shadow: 0 5px 25px rgba(35,63,53,.055);
+}
+
+.header-main {
+    min-height: 112px;
+    display: grid;
+    grid-template-columns: 270px minmax(250px,1fr) 250px;
+    align-items: center;
+    gap: 25px;
+}
+
+/* LOGO */
+
+.brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none !important;
+    width: fit-content;
+}
+
+.brand-icon {
+    width: 57px;
+    height: 57px;
+    border-radius: 17px;
+    background: var(--sb-green);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 25px;
+    box-shadow: 0 7px 18px rgba(49,94,80,.2);
+    transition: .3s ease;
+}
+
+.brand:hover .brand-icon {
+    transform: translateY(-3px);
+    background: var(--sb-green-dark);
+}
+
+.brand-text {
+    display: block;
+    color: var(--sb-green-dark);
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: -1.2px;
+    line-height: 1.2;
+}
+
+    .brand-text span {
+        color: var(--sb-green);
+    }
+
+    .brand-text small {
+        display: block;
+        color: #9b8a68;
+        font-size: 9px;
+        letter-spacing: 2.8px;
+        font-weight: 700;
+        margin-top: 6px;
+    }
+
+/* SEARCH */
+
+.search-form {
+    height: 51px;
+    display: flex;
+    align-items: center;
+    padding: 5px 6px 5px 18px;
+    border: 1px solid #e6ece7;
+    background: #f7f9f6;
+    border-radius: 11px;
+    transition: .3s ease;
+    overflow: hidden;
+    min-width: 0;
+}
+
+    .search-form:focus-within {
+        border-color: var(--sb-green);
+        background: #fff;
+        box-shadow: 0 0 0 4px rgba(49,94,80,.08);
+    }
+
+    .search-form > i {
+        color: var(--sb-green);
+        font-size: 16px;
+        margin-right: 13px;
+    }
+
+    .search-form input {
+        flex: 1;
+        min-width: 0;
+        height: 100%;
+        border: none;
+        outline: none;
+        background: transparent;
+        color: var(--sb-text);
+        font-size: 12px;
+    }
+
+        .search-form input::placeholder {
+            color: #9aa69e;
+        }
+
+    .search-form button {
+        height: 39px;
+        padding: 0 20px;
+        border: none;
+        border-radius: 8px;
+        background: var(--sb-green);
+        color: #fff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .25s ease;
+    }
+
+        .search-form button:hover {
+            background: var(--sb-green-dark);
+        }
+
+/* HEADER ACTIONS */
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 13px;
+}
+
+    .header-actions a {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 9px;
+        min-height: 43px;
+        padding: 0 14px;
+        border-radius: 9px;
+        color: var(--sb-green-dark);
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+        transition: .25s ease;
+    }
+
+        .header-actions a:hover {
+            background: var(--sb-green-light);
+            color: var(--sb-green);
+        }
+
+    .header-actions .cart-link {
+        position: relative;
+        background: #f5f7f3;
+    }
+
+.cart-link i {
+    font-size: 17px;
+}
+
+.cart-badge {
+    min-width: 19px;
+    height: 19px;
+    padding: 0 5px;
+    position: absolute;
+    top: -6px;
+    right: -4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #c49b5b;
+    color: #fff;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 800;
+}
+
+.header-actions .login-button {
+    background: var(--sb-green);
+    color: #fff;
+    padding: 0 17px;
+}
+
+    .header-actions .login-button:hover {
+        background: var(--sb-green-dark);
+        color: #fff;
+    }
+
+/* NAVIGATION */
+
+.main-nav {
+    border-top: 1px solid #f0f2ee;
+    background: #fff;
+}
+
+.nav-inner {
+    min-height: 65px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.nav-link {
+    min-height: 65px;
+    padding: 0 17px;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    position: relative;
+    color: #42564c;
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none !important;
+    transition: .25s ease;
+}
+
+    .nav-link i {
+        color: var(--sb-green);
+        font-size: 13px;
+    }
+
+    .nav-link::after {
+        content: "";
+        position: absolute;
+        height: 2px;
+        width: 0;
+        left: 50%;
+        bottom: 0;
+        background: var(--sb-gold);
+        transform: translateX(-50%);
+        transition: .25s ease;
+    }
+
+    .nav-link:hover {
+        color: var(--sb-green);
+    }
+
+        .nav-link:hover::after {
+            width: 65%;
+        }
+
+.nav-highlight {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    color: #8d7955;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+    .nav-highlight i {
+        color: var(--sb-gold);
+    }
+
+/* ACCOUNT */
+
+.nav-account {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+}
+
+.nav-account-name {
+    color: var(--sb-green-dark);
+    font-size: 11px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.nav-account-link {
+    color: #52675c;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 9px 13px;
+    border-radius: 7px;
+    white-space: nowrap;
+}
+
+    .nav-account-link:hover {
+        background: var(--sb-green-light);
+        color: var(--sb-green);
+    }
+
+    .nav-account-link.register-link {
+        background: var(--sb-green);
+        color: #fff;
+    }
+
+        .nav-account-link.register-link:hover {
+            background: var(--sb-green-dark);
+        }
+
+.account-menu-btn {
+    border: 1px solid #e5ebe5;
+    background: #fff;
+    color: #a25d52;
+    padding: 8px 12px;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: .25s;
+}
+
+    .account-menu-btn:hover {
+        background: #fff3f0;
+        border-color: #e8c7c0;
+    }
+
+/* RESPONSIVE */
+
+@media (max-width: 1100px) {
+    .header-main {
+        grid-template-columns: 230px minmax(200px,1fr) 190px;
+        gap: 18px;
+    }
+
+    .brand-text {
+        font-size: 22px;
+    }
+
+    .nav-link {
+        padding: 0 11px;
+    }
+
+    .nav-highlight {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .top-bar-inner span:nth-child(2),
+    .top-bar-inner span:nth-child(3) {
+        display: none;
+    }
+
+    .top-bar-inner {
+        justify-content: center;
+    }
+
+    .header-main {
+        padding-top: 18px;
+        padding-bottom: 18px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .brand {
+        flex: 1;
+    }
+
+    .header-actions {
+        gap: 5px;
+    }
+
+    .search-form {
+        flex-basis: 100%;
+        order: 3;
+    }
+
+    .main-nav {
+        overflow-x: auto;
+    }
+
+    .nav-inner {
+        width: max-content;
+        min-height: 54px;
+        gap: 0;
+    }
+
+    .nav-link {
+        min-height: 54px;
+        padding: 0 13px;
+        font-size: 11px;
+    }
+
+    .nav-account {
+        margin-left: 5px;
+    }
+
+    .nav-account-name {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .brand-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 20px;
+        border-radius: 13px;
+    }
+
+    .brand-text {
+        font-size: 20px;
+    }
+
+        .brand-text small {
+            font-size: 7px;
+            letter-spacing: 2px;
+        }
+
+    .header-actions a {
+        padding: 0 9px;
+        font-size: 11px;
+    }
+
+    .header-actions .login-button {
+        display: none;
+    }
+
+    .nav-link {
+        padding: 0 10px;
+    }
+    /* ==============================
+   SMARTBOOK - FONT & LOGO
+============================== */
+
+    /* Font chữ toàn website */
+    html,
+    body,
+    button,
+    input,
+    select,
+    textarea {
+        font-family: 'Be Vietnam Pro', sans-serif !important;
+    }
+
+    body {
+        font-weight: 400;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* Logo */
+    .brand {
+        display: inline-flex !important;
+        align-items: center;
+        gap: 12px;
+        text-decoration: none !important;
+        flex-shrink: 0;
+        color: #203f36 !important;
+    }
+
+    .brand-icon {
+        width: 48px;
+        height: 48px;
+        min-width: 48px;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        background: #203f36;
+        color: #ffffff !important;
+        border-radius: 13px;
+        font-size: 23px;
+        box-shadow: 0 5px 14px rgba(32, 63, 54, 0.15);
+    }
+
+        .brand-icon i {
+            display: inline-block !important;
+            color: #ffffff !important;
+        }
+
+    .brand-text {
+        display: flex !important;
+        flex-direction: column;
+        color: #203f36 !important;
+        font-size: 25px;
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -0.8px;
+    }
+
+        .brand-text > span {
+            display: inline !important;
+            color: #c9a96e !important;
+        }
+
+        .brand-text small {
+            display: block !important;
+            margin-top: 5px;
+            color: #829087 !important;
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            line-height: 1.4;
+        }
+
+    .brand:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+    }
+}

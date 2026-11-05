@@ -1,0 +1,191 @@
+﻿
+@model SmartBook.ViewModels.LoginViewModel
+
+@{
+    ViewBag.Title = "Đăng nhập - SmartBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .account-page {
+        min-height: 80vh;
+        background: #f7faf8;
+        padding: 65px 15px;
+        font-family: 'Be Vietnam Pro', sans-serif;
+        color: #294b40;
+    }
+
+    .account-card {
+        max-width: 460px;
+        margin: auto;
+        background: white;
+        padding: 40px;
+        border: 1px solid #e3ece6;
+        border-radius: 20px;
+        box-shadow: 0 10px 35px rgba(35,75,60,.07);
+    }
+
+    .account-heading {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+        .account-heading i {
+            color: #39766b;
+            font-size: 45px;
+            margin-bottom: 15px;
+        }
+
+        .account-heading h1 {
+            color: #183b36;
+            font-size: 28px;
+            font-weight: 900;
+        }
+
+        .account-heading p {
+            color: #84958b;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+    .account-group {
+        margin-bottom: 20px;
+    }
+
+        .account-group label {
+            display: block;
+            color: #31584b;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+    .account-input {
+        width: 100%;
+        height: 48px;
+        border: 1px solid #dce9e0;
+        border-radius: 9px;
+        padding: 10px 14px;
+        outline: none;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+
+        .account-input:focus {
+            border-color: #39766b;
+            box-shadow: 0 0 0 3px rgba(57,118,107,.1);
+        }
+
+    .account-validation {
+        color: #c45b42;
+        font-size: 12px;
+        display: block;
+        margin-top: 5px;
+    }
+
+    .account-error {
+        background: #fff0ed;
+        color: #b94e40;
+        border-radius: 8px;
+        padding: 12px;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .account-submit {
+        width: 100%;
+        border: none;
+        border-radius: 9px;
+        background: #39766b;
+        color: white;
+        padding: 14px;
+        font-weight: 800;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 8px;
+        transition: .2s;
+    }
+
+        .account-submit:hover {
+            background: #234e43;
+            transform: translateY(-2px);
+        }
+
+    .account-switch {
+        text-align: center;
+        color: #84958b;
+        font-size: 13px;
+        margin-top: 23px;
+    }
+
+        .account-switch a {
+            color: #39766b;
+            font-weight: 800;
+            text-decoration: none;
+        }
+
+    @@media(max-width: 500px) {
+        .account-card {
+            padding: 27px 20px;
+        }
+    }
+</style>
+
+<div class="account-page">
+    <div class="account-card">
+
+        <div class="account-heading">
+            <i class="fa-solid fa-user-circle"></i>
+            <h1>Chào mừng trở lại!</h1>
+            <p>Đăng nhập để tiếp tục hành trình khám phá sách.</p>
+        </div>
+
+        @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(false, "", new
+            {
+                @class = "account-error"
+            })
+
+            <div class="account-group">
+                @Html.LabelFor(x => x.email, "Địa chỉ email")
+                @Html.TextBoxFor(x => x.email, new
+                {
+                    @class = "account-input",
+                    placeholder = "Nhập email của bạn",
+                    type = "email"
+                })
+                @Html.ValidationMessageFor(x => x.email, "", new
+                {
+                    @class = "account-validation"
+                })
+            </div>
+
+            <div class="account-group">
+                @Html.LabelFor(x => x.password, "Mật khẩu")
+                @Html.PasswordFor(x => x.password, new
+                {
+                    @class = "account-input",
+                    placeholder = "Nhập mật khẩu"
+                })
+                @Html.ValidationMessageFor(x => x.password, "", new
+                {
+                    @class = "account-validation"
+                })
+            </div>
+
+            <button type="submit" class="account-submit">
+                <i class="fa-solid fa-right-to-bracket"></i>
+                ĐĂNG NHẬP
+            </button>
+        }
+
+        <div class="account-switch">
+            Chưa có tài khoản?
+            <a href="@Url.Action("Register", "Account")">Đăng ký ngay</a>
+        </div>
+
+    </div>
+</div>

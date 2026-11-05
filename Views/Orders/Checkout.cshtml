@@ -1,0 +1,173 @@
+﻿
+@model SmartBook.Models.CheckoutViewModel
+
+@{
+    ViewBag.Title = "Đặt hàng - SmartBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .checkout-page {
+        background: #f7faf8;
+        min-height: 80vh;
+        padding: 55px 20px;
+        font-family: 'Be Vietnam Pro', sans-serif;
+        color: #23483e;
+    }
+
+    .checkout-container {
+        max-width: 850px;
+        margin: auto;
+    }
+
+    .checkout-card {
+        background: white;
+        padding: 35px;
+        border-radius: 20px;
+        border: 1px solid #e1ece6;
+        box-shadow: 0 10px 30px rgba(40,83,65,.06);
+    }
+
+    .checkout-title {
+        color: #183b36;
+        font-size: 30px;
+        font-weight: 900;
+        margin-bottom: 8px;
+    }
+
+    .checkout-desc {
+        color: #81938a;
+        margin-bottom: 28px;
+    }
+
+    .checkout-label {
+        display: block;
+        color: #31584b;
+        font-weight: 700;
+        margin: 18px 0 8px;
+    }
+
+    .checkout-input {
+        width: 100%;
+        padding: 13px 15px;
+        border: 1px solid #dce9e0;
+        border-radius: 9px;
+        outline: none;
+        font-family: inherit;
+    }
+
+        .checkout-input:focus {
+            border-color: #39766b;
+            box-shadow: 0 0 0 3px rgba(57,118,107,.1);
+        }
+
+    .checkout-submit {
+        width: 100%;
+        padding: 15px;
+        border: none;
+        border-radius: 10px;
+        background: #39766b;
+        color: white;
+        font-weight: 800;
+        font-size: 15px;
+        margin-top: 25px;
+        cursor: pointer;
+        transition: .25s;
+    }
+
+        .checkout-submit:hover {
+            background: #234e43;
+            transform: translateY(-2px);
+        }
+
+    .field-error {
+        color: #bd6868;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .validation-summary-errors {
+        background: #fff1f0;
+        color: #a33d37;
+        border-radius: 9px;
+        padding: 12px 18px;
+        margin-bottom: 15px;
+    }
+
+    @@media(max-width: 600px) {
+        .checkout-card {
+            padding: 22px 17px;
+        }
+    }
+</style>
+
+<div class="checkout-page">
+    <div class="checkout-container">
+
+        <div class="checkout-card">
+
+            <h1 class="checkout-title">
+                <i class="fa-solid fa-truck-fast"></i>
+                Thông tin đặt hàng
+            </h1>
+
+            <p class="checkout-desc">
+                Vui lòng điền chính xác thông tin để SmartBook giao sách đến bạn.
+            </p>
+
+            @using (Html.BeginForm("Checkout", "Orders", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(false, "", new { @class = "field-error" })
+
+                <label class="checkout-label">Họ và tên người nhận *</label>
+                @Html.TextBoxFor(x => x.FullName,
+                    new
+                         {
+                        @class = "checkout-input",
+                        placeholder = "Nhập họ và tên"
+                    })
+                @Html.ValidationMessageFor(x => x.FullName,
+                    "", new { @class = "field-error" })
+
+                <label class="checkout-label">Số điện thoại *</label>
+                @Html.TextBoxFor(x => x.Phone,
+                    new
+                         {
+                        @class = "checkout-input",
+                        placeholder = "Nhập số điện thoại",
+                        type = "tel"
+                    })
+                @Html.ValidationMessageFor(x => x.Phone,
+                    "", new { @class = "field-error" })
+
+                <label class="checkout-label">Địa chỉ nhận hàng *</label>
+                @Html.TextAreaFor(x => x.Address,
+                    new
+                         {
+                        @class = "checkout-input",
+                        rows = "3",
+                        placeholder = "Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố"
+                    })
+                @Html.ValidationMessageFor(x => x.Address,
+                    "", new { @class = "field-error" })
+
+                <label class="checkout-label">Ghi chú đơn hàng</label>
+                @Html.TextAreaFor(x => x.Note,
+                    new
+                         {
+                        @class = "checkout-input",
+                        rows = "3",
+                        placeholder = "Ghi chú thêm nếu có..."
+                    })
+
+                <button type="submit" class="checkout-submit">
+                    XÁC NHẬN ĐẶT HÀNG
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
+            }
+
+        </div>
+    </div>
+</div>

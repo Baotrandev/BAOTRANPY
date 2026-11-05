@@ -1,0 +1,161 @@
+﻿
+@model SmartBook.Models.book
+
+@{
+    ViewBag.Title = "Thêm sách mới";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container" style="max-width: 900px; margin: 40px auto;">
+
+    <div class="panel panel-default" style="border-radius: 12px; overflow: hidden;">
+
+        <div class="panel-heading"
+             style="background: #263b59; color: white; padding: 20px;">
+            <h3 style="margin: 0;">
+                <i class="fa fa-book"></i> THÊM SÁCH MỚI
+            </h3>
+            <p style="margin: 8px 0 0;">
+                Nhập thông tin sách vào hệ thống SmartBook
+            </p>
+        </div>
+
+        <div class="panel-body" style="padding: 30px;">
+
+            @using (Html.BeginForm("Create", "Product", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(true, "",
+                    new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.book_title, "Tên sách")
+                    @Html.TextBoxFor(m => m.book_title,
+                        new { @class = "form-control", placeholder = "Nhập tên sách..." })
+                    @Html.ValidationMessageFor(m => m.book_title,
+                        "", new { @class = "text-danger" })
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.category_id, "Thể loại")
+                            @Html.DropDownListFor(m => m.category_id,
+                                ViewBag.category_id as SelectList,
+                                "-- Chọn thể loại --",
+                                new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.category_id,
+                                "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.publisher_id, "Nhà xuất bản")
+                            @Html.DropDownListFor(m => m.publisher_id,
+                                ViewBag.publisher_id as SelectList,
+                                "-- Chọn nhà xuất bản --",
+                                new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ISBN, "Mã ISBN")
+                    @Html.TextBoxFor(m => m.ISBN,
+                        new { @class = "form-control", placeholder = "Nhập mã ISBN..." })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.description, "Mô tả")
+                    @Html.TextAreaFor(m => m.description,
+                        new { @class = "form-control", rows = "4", placeholder = "Mô tả nội dung sách..." })
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.publication_date, "Ngày xuất bản")
+                            @Html.TextBoxFor(m => m.publication_date,
+                                "{0:yyyy-MM-dd}",
+                                new { @class = "form-control", type = "date" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.page_count, "Số trang")
+                            @Html.TextBoxFor(m => m.page_count,
+                                new { @class = "form-control", type = "number", min = "1" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.language, "Ngôn ngữ")
+                            @Html.TextBoxFor(m => m.language,
+                                new { @class = "form-control", placeholder = "Ví dụ: Tiếng Việt" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.book_format, "Định dạng sách")
+                            @Html.TextBoxFor(m => m.book_format,
+                                new { @class = "form-control", placeholder = "Ví dụ: Bìa mềm" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.cover_image_url, "Đường dẫn ảnh bìa")
+                    @Html.TextBoxFor(m => m.cover_image_url,
+                        new { @class = "form-control", placeholder = "~/Images/ten-anh.jpg" })
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.original_price, "Giá gốc")
+                            @Html.TextBoxFor(m => m.original_price,
+                                new { @class = "form-control", type = "number", min = "0" })
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.sale_price, "Giá bán")
+                            @Html.TextBoxFor(m => m.sale_price,
+                                new { @class = "form-control", type = "number", min = "0" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.status, "Trạng thái")
+                    @Html.DropDownListFor(m => m.status,
+                        new SelectList(new[]
+                        {
+                            new { Value = "active", Text = "Đang kinh doanh" },
+                            new { Value = "inactive", Text = "Ngừng kinh doanh" }
+                        }, "Value", "Text"),
+                        "-- Chọn trạng thái --",
+                        new { @class = "form-control" })
+                </div>
+
+                <hr />
+
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa fa-save"></i> Lưu sách
+                </button>
+
+                @Html.ActionLink("Quay lại", "Index", "Product",
+                    null, new { @class = "btn btn-default" })
+            }
+
+        </div>
+    </div>
+</div>

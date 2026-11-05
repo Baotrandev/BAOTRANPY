@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewBag.Title = "Đặt hàng thành công - SmartBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .success-page {
+        min-height: 70vh;
+        background: #f7faf8;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 45px 20px;
+        font-family: 'Be Vietnam Pro', sans-serif;
+    }
+
+    .success-card {
+        max-width: 600px;
+        width: 100%;
+        background: white;
+        padding: 45px 30px;
+        border-radius: 22px;
+        text-align: center;
+        border: 1px solid #e1ece6;
+        box-shadow: 0 12px 35px rgba(40,83,65,.07);
+    }
+
+    .success-icon {
+        font-size: 65px;
+        color: #39766b;
+        margin-bottom: 20px;
+    }
+
+    .success-card h1 {
+        color: #183b36;
+        font-weight: 900;
+        font-size: 28px;
+    }
+
+    .success-card p {
+        color: #81938a;
+        line-height: 1.8;
+    }
+
+    .success-code {
+        background: #edf5f1;
+        color: #28594b;
+        padding: 15px;
+        border-radius: 10px;
+        margin: 22px 0;
+        font-weight: 800;
+    }
+
+    .success-total {
+        font-size: 23px;
+        color: #39766b;
+        font-weight: 900;
+        margin: 15px 0 25px;
+    }
+
+    .success-button {
+        display: inline-block;
+        background: #39766b;
+        color: white !important;
+        padding: 13px 25px;
+        border-radius: 9px;
+        text-decoration: none;
+        font-weight: 800;
+    }
+
+        .success-button:hover {
+            background: #234e43;
+            text-decoration: none;
+        }
+</style>
+
+<div class="success-page">
+    <div class="success-card">
+
+        <div class="success-icon">
+            <i class="fa-solid fa-circle-check"></i>
+        </div>
+
+        <h1>Đặt hàng thành công!</h1>
+
+        <p>
+            Cảm ơn bạn đã lựa chọn SmartBook.
+            Đơn hàng của bạn đã được ghi nhận và đang chờ xác nhận.
+        </p>
+
+        <div class="success-code">
+            Mã đơn hàng: @ViewBag.OrderCode
+        </div>
+
+        <div class="success-total">
+            Tổng thanh toán: @String.Format("{0:N0}₫", ViewBag.Total)
+        </div>
+
+        <a href="@Url.Action("Index", "Products")"
+           class="success-button">
+            Tiếp tục mua sắm
+            <i class="fa-solid fa-arrow-right"></i>
+        </a>
+
+    </div>
+</div>

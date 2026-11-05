@@ -1,0 +1,222 @@
+﻿
+/* ==============================
+   SMARTBOOK - MAIN DESIGN
+============================== */
+
+:root {
+    --primary: #203f36;
+    --primary-light: #315e50;
+    --accent: #c9a96e;
+    --background: #f7faf8;
+    --white: #ffffff;
+    --text: #263d35;
+    --muted: #829087;
+    --border: #e8ede8;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+    font-family: 'Be Vietnam Pro', sans-serif !important;
+}
+
+body {
+    background: var(--background);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+a {
+    text-decoration: none !important;
+    transition: all .25s ease;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: auto;
+}
+
+/* MAIN CONTENT */
+
+.main-content {
+    min-height: 500px;
+    padding: 38px 0 65px;
+}
+
+.content-inner {
+    width: 90%;
+    max-width: 1200px;
+}
+
+/* FOOTER */
+
+.main-footer {
+    background: var(--primary);
+    color: #dce3ef;
+    padding-top: 58px;
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr 1.2fr 1.2fr;
+    gap: 40px;
+    padding-bottom: 45px;
+}
+
+.footer-logo {
+    color: white;
+    font-size: 25px;
+    font-weight: 800;
+    display: inline-block;
+    margin-bottom: 17px;
+}
+
+    .footer-logo i {
+        color: var(--accent);
+        margin-right: 8px;
+    }
+
+    .footer-logo > span {
+        color: var(--accent);
+    }
+
+.footer-column h4 {
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 6px 0 22px;
+}
+
+.footer-column p {
+    color: #b8c4d6;
+    font-size: 11px;
+    line-height: 2;
+    margin-bottom: 13px;
+}
+
+.footer-column > a:not(.footer-logo) {
+    display: block;
+    color: #b8c4d6;
+    font-size: 11px;
+    margin-bottom: 12px;
+}
+
+    .footer-column > a:not(.footer-logo):hover {
+        color: var(--accent);
+        padding-left: 5px;
+    }
+
+.footer-column p i {
+    color: var(--accent);
+    width: 20px;
+}
+
+.social-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+    .social-links a {
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid rgba(255,255,255,.2);
+        border-radius: 50%;
+        color: white;
+    }
+
+        .social-links a:hover {
+            background: var(--accent);
+            color: var(--primary);
+            border-color: var(--accent);
+            transform: translateY(-3px);
+        }
+
+.footer-payment {
+    margin-top: 20px;
+}
+
+    .footer-payment span {
+        font-size: 9px;
+        letter-spacing: 1px;
+        color: #b8c4d6;
+    }
+
+    .footer-payment div {
+        display: flex;
+        gap: 12px;
+        font-size: 25px;
+        color: white;
+        margin-top: 8px;
+    }
+
+/* COPYRIGHT */
+
+.footer-bottom {
+    background: #172f29;
+    border-top: 1px solid rgba(255,255,255,.08);
+}
+
+.footer-bottom-content {
+    min-height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: #aab8cc;
+    font-size: 10px;
+}
+
+.footer-bottom strong {
+    color: white;
+}
+
+.footer-bottom i {
+    color: #ed7777;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 992px) {
+    .footer-content {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .main-content {
+        padding: 25px 0 40px;
+    }
+
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .footer-bottom-content {
+        padding: 15px 0;
+        flex-direction: column;
+        text-align: center;
+    }
+}

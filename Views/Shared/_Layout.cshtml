@@ -1,0 +1,338 @@
+﻿
+<!DOCTYPE html>
+<html lang="vi">
+@{
+    var cartItems = Session["SmartBookCart"]
+        as List<SmartBook.Models.CartItemViewModel>;
+
+    int cartCount = cartItems == null
+        ? 0
+        : cartItems.Sum(x => x.Quantity);
+}
+<head>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+        <title>@ViewBag.Title - SmartBook</title>
+
+        <!-- Font tiếng Việt không chân -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap"
+              rel="stylesheet" />
+
+        <!-- Icon -->
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+
+        <!-- CSS website -->
+        <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" />
+        <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" />
+        <link href="@Url.Content("~/Content/SmartBookHeader.css")" rel="stylesheet" />
+
+        @RenderSection("styles", required: false)
+    </head>
+</head>
+
+<body>
+
+    <!-- TOP ANNOUNCEMENT -->
+    <div class="top-bar">
+        <div class="container top-bar-inner">
+            <span>
+                <i class="fa-solid fa-truck-fast"></i>
+                Giao hàng toàn quốc
+            </span>
+
+            <span>
+                <i class="fa-solid fa-gift"></i>
+                Ưu đãi đặc biệt dành cho người yêu sách
+            </span>
+
+            <span>
+                <i class="fa-solid fa-headset"></i>
+                Hỗ trợ khách hàng 24/7
+            </span>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="main-header">
+
+        <div class="container header-main">
+
+            <!-- LOGO -->
+            <a href="@Url.Action("Index", "Home")" class="brand">
+                <span class="brand-icon">
+                    <i class="fa-solid fa-book-open"></i>
+                </span>
+
+                <span class="brand-text">
+                    Smart<span>Book.</span>
+                    <small>READ • DISCOVER • GROW</small>
+                </span>
+            </a>
+
+            <!-- SEARCH -->
+            <form action="@Url.Action("Index", "Products")"
+                  method="get"
+                  class="search-form">
+
+                <i class="fa-solid fa-magnifying-glass"></i>
+
+                <input type="text"
+                       name="keyword"
+                       value="@Request.QueryString["keyword"]"
+                       placeholder="Tìm kiếm sách, tác giả, thể loại..." />
+
+                <button type="submit">
+                    Tìm kiếm
+                </button>
+            </form>
+
+            <!-- HEADER ACTIONS -->
+            <div class="header-actions">
+
+                <a href="@Url.Action("Index", "Cart")"
+                   class="cart-link">
+
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    Giỏ hàng
+
+                    @if (cartCount > 0)
+                    {
+                        <span class="cart-badge">@cartCount</span>
+                    }
+                </a>
+
+                @if (Session["CustomerID"] == null)
+                {
+                    <a href="@Url.Action("Login", "Account")"
+                       class="login-button">
+                        <i class="fa-regular fa-user"></i>
+                        Tài khoản
+                    </a>
+                }
+
+            </div>
+
+        </div>
+
+        <!-- NAVIGATION -->
+        <nav class="main-nav">
+            <div class="container nav-inner">
+
+                <a href="@Url.Action("Index", "Home")"
+                   class="nav-link">
+                    <i class="fa-solid fa-house"></i>
+                    Trang chủ
+                </a>
+
+                <a href="@Url.Action("Index", "Products")"
+                   class="nav-link">
+                    <i class="fa-solid fa-book-open"></i>
+                    Sách
+                </a>
+
+                <a href="@Url.Action("Index", "Products")"
+                   class="nav-link">
+                    <i class="fa-solid fa-layer-group"></i>
+                    Thể loại
+                </a>
+
+                <a href="@Url.Action("About", "Home")"
+                   class="nav-link">
+                    <i class="fa-solid fa-circle-info"></i>
+                    Giới thiệu
+                </a>
+
+                <a href="@Url.Action("Contact", "Home")"
+                   class="nav-link">
+                    <i class="fa-solid fa-envelope"></i>
+                    Liên hệ
+                </a>
+
+                <div class="nav-highlight">
+                    <i class="fa-solid fa-star"></i>
+                    Khám phá tri thức mỗi ngày
+                </div>
+
+                <!-- ACCOUNT -->
+                <div class="nav-account">
+
+                    @if (Session["CustomerID"] != null)
+                    {
+                        <span class="nav-account-name">
+                            Xin chào, @Session["CustomerName"]
+                        </span>
+
+                        using (Html.BeginForm(
+                            "Logout",
+                            "Account",
+                            FormMethod.Post,
+                            new { style = "display:inline;" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="account-menu-btn">
+                                <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                Đăng xuất
+                            </button>
+                        }
+                    }
+                    else
+                    {
+                        <a href="@Url.Action("Login", "Account")"
+                           class="nav-account-link">
+                            Đăng nhập
+                        </a>
+
+                        <a href="@Url.Action("Register", "Account")"
+                           class="nav-account-link register-link">
+                            Đăng ký
+                        </a>
+                    }
+
+                </div>
+
+            </div>
+        </nav>
+
+    </header>
+
+
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <div class="container content-inner">
+            @RenderBody()
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+
+        <div class="container footer-content">
+
+            <!-- BRAND -->
+            <div class="footer-column footer-brand">
+
+                <a href="@Url.Action("Index", "Home")" class="footer-logo">
+                    <i class="fa-solid fa-book-open"></i>
+                    Smart<span>Book.</span>
+                </a>
+
+                <p>
+                    SmartBook là không gian dành cho những người yêu sách.
+                    Chúng tôi mang đến những cuốn sách chất lượng,
+                    giúp bạn khám phá tri thức và phát triển bản thân mỗi ngày.
+                </p>
+
+                <div class="social-links">
+                    <a href="#" aria-label="Facebook">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+
+                    <a href="#" aria-label="TikTok">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- DISCOVER -->
+            <div class="footer-column">
+                <h4>Khám phá</h4>
+
+                <a href="@Url.Action("Index", "Home")">Trang chủ</a>
+
+                <a href="@Url.Action("Index", "Products")">
+                    Tất cả sách
+                </a>
+
+                <a href="@Url.Action("Index", "Products")">
+                    Thể loại sách
+                </a>
+
+                <a href="@Url.Action("About", "Home")">
+                    Về SmartBook
+                </a>
+            </div>
+
+            <!-- SUPPORT -->
+            <div class="footer-column">
+                <h4>Hỗ trợ khách hàng</h4>
+
+                <a href="#">Hướng dẫn mua hàng</a>
+                <a href="#">Chính sách thanh toán</a>
+                <a href="#">Chính sách vận chuyển</a>
+                <a href="#">Chính sách đổi trả</a>
+                <a href="#">Chính sách bảo mật</a>
+            </div>
+
+            <!-- CONTACT -->
+            <div class="footer-column">
+                <h4>Thông tin liên hệ</h4>
+
+                <p>
+                    <i class="fa-regular fa-envelope"></i>
+                    smartbook@gmail.com
+                </p>
+
+                <p>
+                    <i class="fa-solid fa-phone"></i>
+                    0900 000 000
+                </p>
+
+                <p>
+                    <i class="fa-solid fa-location-dot"></i>
+                    Thành phố Hồ Chí Minh
+                </p>
+
+                <div class="footer-payment">
+                    <span>THANH TOÁN AN TOÀN</span>
+
+                    <div>
+                        <i class="fa-brands fa-cc-visa"></i>
+                        <i class="fa-brands fa-cc-mastercard"></i>
+                        <i class="fa-solid fa-money-bill-wave"></i>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- COPYRIGHT -->
+        <div class="footer-bottom">
+            <div class="container footer-bottom-content">
+
+                <p>
+                    © 2026 <strong>SmartBook</strong>.
+                    Mở trang sách, mở tương lai.
+                </p>
+
+                <p>
+                    Made with <i class="fa-solid fa-heart"></i>
+                    for book lovers.
+                </p>
+
+            </div>
+        </div>
+
+    </footer>
+
+    <!-- JAVASCRIPT -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+    <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
+
+    @RenderSection("scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,334 @@
+﻿
+@{
+    ViewBag.Title = "Liên hệ - SmartBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+
+    /* ===== CONTACT - SMARTBOOK GREEN THEME ===== */
+
+    .contact-page {
+        background: #f7faf8;
+        color: #183b36;
+        padding: 45px 0 70px;
+        font-family: 'Be Vietnam Pro', sans-serif;
+    }
+
+    /* Banner giới thiệu */
+    .contact-hero {
+        background: linear-gradient(120deg, #183b36, #39766b);
+        color: #ffffff;
+        padding: 65px 35px;
+        border-radius: 22px;
+        text-align: center;
+        margin-bottom: 45px;
+        box-shadow: 0 10px 30px rgba(24, 59, 54, 0.12);
+    }
+
+        .contact-hero h1 {
+            color: #ffffff;
+            font-size: 38px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .contact-hero p {
+            color: #edf5f1;
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+    /* Tiêu đề các khu vực */
+    .contact-title {
+        color: #183b36;
+        font-size: 27px;
+        font-weight: 800;
+        margin-bottom: 12px;
+    }
+
+    .contact-subtitle {
+        color: #39766b;
+        line-height: 1.7;
+        margin-bottom: 25px;
+    }
+
+    /* Khung thông tin liên hệ */
+    .contact-info,
+    .contact-form {
+        background: #ffffff;
+        border: 1px solid #e8eeea;
+        border-radius: 20px;
+        padding: 30px;
+        height: 100%;
+        box-shadow: 0 8px 25px rgba(24, 59, 54, 0.06);
+    }
+
+    /* Từng thông tin */
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 17px;
+        padding: 18px;
+        margin-bottom: 15px;
+        background: #f1f7f4;
+        border-radius: 14px;
+        border: 1px solid #e1ece6;
+        transition: 0.3s;
+    }
+
+        .contact-item:hover {
+            background: #e5f0eb;
+            transform: translateY(-3px);
+        }
+
+        .contact-item i {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #204e43;
+            color: #f5d88b;
+            border-radius: 12px;
+            font-size: 19px;
+            flex-shrink: 0;
+        }
+
+        .contact-item h4 {
+            color: #183b36;
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .contact-item p,
+        .contact-item a {
+            color: #39766b;
+            margin: 0;
+            text-decoration: none;
+        }
+
+    /* Form liên hệ */
+    .contact-form label {
+        color: #183b36;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .contact-form .form-control {
+        background: #f7faf8;
+        border: 1px solid #dce8e1;
+        border-radius: 10px;
+        padding: 12px 15px;
+        color: #183b36;
+        box-shadow: none;
+    }
+
+        .contact-form .form-control:focus {
+            border-color: #39766b;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(57, 118, 107, 0.12);
+        }
+
+        .contact-form .form-control::placeholder {
+            color: #9aaca4;
+        }
+
+    /* Nút gửi */
+    .contact-submit {
+        background: #204e43;
+        color: #ffffff;
+        border: none;
+        border-radius: 30px;
+        padding: 13px 30px;
+        font-weight: 700;
+        transition: 0.3s;
+    }
+
+        .contact-submit:hover {
+            background: #39766b;
+            color: #f5d88b;
+            transform: translateY(-2px);
+        }
+
+    /* Thông báo */
+    .contact-message {
+        background: #e5f0eb;
+        color: #204e43;
+        border: 1px solid #c9ded3;
+        border-radius: 10px;
+        padding: 13px 16px;
+        margin-bottom: 20px;
+    }
+
+    /* Liên kết */
+    .contact-page a:hover {
+        color: #204e43;
+    }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+        .contact-hero {
+            padding: 45px 20px;
+        }
+
+            .contact-hero h1 {
+                font-size: 28px;
+            }
+
+        .contact-info,
+        .contact-form {
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+    }
+
+</style>
+
+<div class="contact-page">
+
+    <!-- BANNER LIÊN HỆ -->
+    <section class="contact-hero">
+        <div>
+            <h1>Liên hệ với SmartBook</h1>
+            <p>
+                Chúng tôi luôn sẵn sàng lắng nghe và đồng hành cùng bạn
+                trên hành trình khám phá tri thức.
+            </p>
+        </div>
+    </section>
+
+    <div class="contact-container">
+
+        <div class="contact-heading">
+            <span>WE ARE HERE FOR YOU</span>
+            <h2>Kết nối cùng chúng tôi</h2>
+            <p>
+                Có câu hỏi hoặc cần hỗ trợ? Hãy gửi tin nhắn cho SmartBook nhé!
+            </p>
+        </div>
+
+        <div class="contact-layout">
+
+            <!-- THÔNG TIN LIÊN HỆ -->
+            <div class="contact-info">
+                <h3>Thông tin liên hệ</h3>
+                <p>
+                    Đừng ngần ngại liên hệ với chúng tôi nếu bạn cần
+                    tư vấn về sách, đơn hàng hoặc dịch vụ của SmartBook.
+                </p>
+
+                <div class="contact-item">
+                    <i class="fa-solid fa-location-dot"></i>
+                    <div>
+                        <h4>Địa chỉ</h4>
+                        <p>Thông tin địa chỉ cửa hàng sẽ được cập nhật.</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <i class="fa-solid fa-envelope"></i>
+                    <div>
+                        <h4>Email</h4>
+                        <p>Địa chỉ email hỗ trợ của SmartBook</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <i class="fa-solid fa-phone"></i>
+                    <div>
+                        <h4>Điện thoại</h4>
+                        <p>Số điện thoại hỗ trợ khách hàng</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <i class="fa-solid fa-clock"></i>
+                    <div>
+                        <h4>Thời gian hỗ trợ</h4>
+                        <p>Thứ 2 – Thứ 7: 08:00 – 17:00</p>
+                    </div>
+                </div>
+
+                <div class="contact-social">
+                    <a href="#" aria-label="Facebook">
+                        <i class="fa-brands fa-facebook-f"></i>
+                    </a>
+                    <a href="#" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram"></i>
+                    </a>
+                    <a href="#" aria-label="TikTok">
+                        <i class="fa-brands fa-tiktok"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- FORM GỬI TIN NHẮN -->
+            <div class="contact-form">
+                <h3>Gửi lời nhắn cho chúng tôi</h3>
+                <p>
+                    Điền thông tin bên dưới, SmartBook sẽ tiếp nhận
+                    yêu cầu của bạn.
+                </p>
+
+                @if (TempData["ContactSuccess"] != null)
+                {
+                    <div class="contact-success">
+                        <i class="fa-solid fa-circle-check"></i>
+                        @TempData["ContactSuccess"]
+                    </div>
+                }
+
+                @if (ViewBag.ContactError != null)
+                {
+                    <div class="contact-error">
+                        @ViewBag.ContactError
+                    </div>
+                }
+
+                @using (Html.BeginForm("Contact", "Home", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <label for="fullName">Họ và tên *</label>
+                    <input type="text"
+                           id="fullName"
+                           name="fullName"
+                           class="form-control"
+                           placeholder="Nhập họ và tên của bạn"
+                           required />
+
+                    <label for="email">Địa chỉ email *</label>
+                    <input type="email"
+                           id="email"
+                           name="email"
+                           class="form-control"
+                           placeholder="example@email.com"
+                           required />
+
+                    <label for="subject">Chủ đề *</label>
+                    <input type="text"
+                           id="subject"
+                           name="subject"
+                           class="form-control"
+                           placeholder="Bạn cần hỗ trợ về vấn đề gì?"
+                           required />
+
+                    <label for="message">Nội dung tin nhắn *</label>
+                    <textarea id="message"
+                              name="message"
+                              class="form-control"
+                              placeholder="Nhập nội dung bạn muốn gửi..."
+                              required></textarea>
+
+                    <button type="submit" class="contact-submit">
+                        GỬI TIN NHẮN
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                }
+            </div>
+
+        </div>
+    </div>
+</div>
