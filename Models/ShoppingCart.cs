@@ -14,7 +14,7 @@ namespace SmartBook.Models
             Items = new List<CartItem>();
         }
 
-        // Thêm sách vào giỏ
+        // thêm sách vào giỏ
         public bool Add(book b)
         {
             if (b == null)
@@ -42,7 +42,7 @@ namespace SmartBook.Models
             return true;
         }
 
-        // Cập nhật số lượng
+        // đổi số lượng
         public bool Update(int bookId, int quantity)
         {
             if (quantity <= 0)
@@ -58,25 +58,25 @@ namespace SmartBook.Models
             return true;
         }
 
-        // Xóa một sản phẩm
+        // xóa 1 sp
         public void Remove(int bookId)
         {
             Items.RemoveAll(x => x.BookID == bookId);
         }
 
-        // Xóa toàn bộ giỏ hàng
+        // xóa hết giỏ
         public void Clear()
         {
             Items.Clear();
         }
 
-        // Tổng số lượng
+        // tổng số lượng
         public int TotalQuantity()
         {
             return Items.Sum(x => x.Quantity);
         }
 
-        // Tổng tiền
+        // tổng tiền
         public decimal TotalMoney()
         {
             return Items.Sum(x => x.UnitPrice * x.Quantity);

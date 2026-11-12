@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SmartBook.Models
 {
-    // Thông tin chi tiết của một cuốn sách
+    // info chi tiết 1 cuốn
     public class BookDetailsViewModel
     {
         public book Book { get; set; }
@@ -19,7 +19,7 @@ namespace SmartBook.Models
         }
     }
 
-    // Thông tin tác giả
+    // info tác giả
     public class AuthorDetailViewModel
     {
         public int AuthorId { get; set; }
@@ -33,7 +33,7 @@ namespace SmartBook.Models
         public string ImageUrl { get; set; }
     }
 
-    // Trích đoạn nổi bật từ sách
+    // trích đoạn của sách
     public class BookExcerptViewModel
     {
         public int ExcerptId { get; set; }
