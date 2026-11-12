@@ -27,20 +27,20 @@ namespace SmartBook.Controllers
             return cart;
         }
 
-        // HIEN THI GIO HANG
-        // Duong dan: /Cart/Index
+        // trang giỏ hàng
+        // url: /Cart/Index
         public ActionResult Index()
         {
             return View("Index", GetCart());
         }
 
-        // Duong dan: /Cart/giohang
+        // url: /Cart/giohang
         public ActionResult GioHang()
         {
             return View("Index", GetCart());
         }
 
-        // THEM SACH VAO GIO
+        // thêm sách vào giỏ
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add(int id, int quantity = 1)
@@ -54,7 +54,7 @@ namespace SmartBook.Controllers
             if (book == null)
                 return HttpNotFound();
 
-            // LAY TEN TAC GIA
+            // lấy tên tác giả
             var authorName = (
                 from ba in db.book_authors
                 join a in db.authors
@@ -93,7 +93,7 @@ namespace SmartBook.Controllers
 
             return RedirectToAction("Index", "Cart");
         }
-        // CAP NHAT SO LUONG
+        // đổi số lượng
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Update(int id, int quantity)
@@ -129,7 +129,7 @@ namespace SmartBook.Controllers
             return RedirectToAction("Index");
         }
 
-        // XOA SACH
+        // xóa sách
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Remove(int id)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using SmartBook.Models;
@@ -13,9 +14,7 @@ namespace SmartBook.Controllers
 
         private const string CartKey = "SmartBookCart";
 
-        // ==========================================
-        // HIEN THI FORM DAT HANG
-        // ==========================================
+        // form đặt hàng
         [HttpGet]
         public ActionResult Checkout()
         {
@@ -27,7 +26,7 @@ namespace SmartBook.Controllers
 
             var model = new CheckoutViewModel();
 
-            // Neu khach da dang nhap, tu dong dien ho ten
+            // login rồi thì tự điền tên
             if (Session["CustomerID"] != null)
             {
                 int customerId;
@@ -50,9 +49,7 @@ namespace SmartBook.Controllers
             return View(model);
         }
 
-        // ==========================================
-        // XU LY DAT HANG VA LUU DATABASE
-        // ==========================================
+        // xử lý đặt hàng + lưu db
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Checkout(CheckoutViewModel model)
@@ -66,7 +63,7 @@ namespace SmartBook.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            // Kiem tra gioi han cac cot SQL
+            // check độ dài cột sql kẻo lỗi
             if (model.FullName.Trim().Length > 150)
             {
                 ModelState.AddModelError(
@@ -100,9 +97,7 @@ namespace SmartBook.Controllers
             {
                 try
                 {
-                    // ----------------------------------
-                    // 1. XAC DINH KHACH HANG
-                    // ----------------------------------
+                    // b1: xem ai đang đặt
 
                     int customerId = 0;
 
@@ -118,7 +113,7 @@ namespace SmartBook.Controllers
                             x => x.customer_id == customerId)
                         : null;
 
-                    // Neu session khong hop le thi xu ly nhu khach vang lai
+                    // session lỗi thì coi như khách vãng lai
                     if (customer == null)
                     {
                         string guestEmail =
@@ -145,9 +140,7 @@ namespace SmartBook.Controllers
                         ).Single();
                     }
 
-                    // ----------------------------------
-                    // 2. TAO DIA CHI GIAO HANG
-                    // ----------------------------------
+                    // b2: tạo địa chỉ giao
 
                     int addressId = db.Database.SqlQuery<int>(
                         @"
@@ -182,9 +175,7 @@ namespace SmartBook.Controllers
                         model.Address.Trim()
                     ).Single();
 
-                    // ----------------------------------
-                    // 3. KIEM TRA SACH VA TINH TIEN
-                    // ----------------------------------
+                    // b3: check sách + tính tiền
 
                     decimal subtotal = 0;
 
@@ -205,7 +196,7 @@ namespace SmartBook.Controllers
                                 "Một cuốn sách trong giỏ hàng không còn tồn tại.");
                         }
 
-                        // Lay gia sach moi nhat tu database
+                        // lấy giá mới nhất trong db
                         item.UnitPrice = book.sale_price;
 
                         subtotal +=
@@ -216,9 +207,7 @@ namespace SmartBook.Controllers
                     decimal shipping = 0;
                     decimal total = subtotal - discount + shipping;
 
-                    // ----------------------------------
-                    // 4. KIEM TRA VA TRU TON KHO
-                    // ----------------------------------
+                    // b4: check tồn kho rồi trừ
 
                     foreach (var item in cart)
                     {
@@ -248,9 +237,7 @@ namespace SmartBook.Controllers
                         }
                     }
 
-                    // ----------------------------------
-                    // 5. TAO MA DON HANG
-                    // ----------------------------------
+                    // b5: tạo mã đơn
 
                     string orderCode =
                         "SB" +
@@ -260,9 +247,7 @@ namespace SmartBook.Controllers
                             .Substring(0, 4)
                             .ToUpper();
 
-                    // ----------------------------------
-                    // 6. LUU DON HANG
-                    // ----------------------------------
+                    // b6: lưu đơn
 
                     int orderId = db.Database.SqlQuery<int>(
                         @"
@@ -303,9 +288,7 @@ namespace SmartBook.Controllers
                             : model.Note.Trim()
                     ).Single();
 
-                    // ----------------------------------
-                    // 7. LUU CHI TIET DON HANG
-                    // ----------------------------------
+                    // b7: lưu từng món trong đơn
 
                     foreach (var item in cart)
                     {
@@ -342,13 +325,11 @@ namespace SmartBook.Controllers
                         );
                     }
 
-                    // ----------------------------------
-                    // 8. HOAN TAT GIAO DICH
-                    // ----------------------------------
+                    // b8: commit xong
 
                     transaction.Commit();
 
-                    // Chi xoa gio hang sau khi luu thanh cong
+                    // lưu ok mới xóa giỏ nha
                     Session.Remove(CartKey);
 
                     ViewBag.OrderCode = orderCode;
@@ -371,9 +352,47 @@ namespace SmartBook.Controllers
             }
         }
 
-        // ==========================================
-        // GIAI PHONG DATABASE
-        // ==========================================
+
+        // Danh sách đơn hàng của tài khoản đang đăng nhập
+        public ActionResult MyOrders()
+        {
+            if (Session["CustomerID"] == null)
+                return RedirectToAction("Login", "Account");
+
+            int customerId;
+            if (!int.TryParse(Session["CustomerID"].ToString(), out customerId))
+                return RedirectToAction("Login", "Account");
+
+            var orders = db.orders
+                .Where(x => x.customer_id == customerId)
+                .OrderByDescending(x => x.order_date)
+                .ToList();
+
+            return View("MyOrders", orders);
+        }
+
+        // Chi tiết đơn hàng - chỉ chủ tài khoản mới được xem
+        public ActionResult Details(int id)
+        {
+            if (Session["CustomerID"] == null)
+                return RedirectToAction("Login", "Account");
+
+            int customerId;
+            if (!int.TryParse(Session["CustomerID"].ToString(), out customerId))
+                return RedirectToAction("Login", "Account");
+
+            var order = db.orders
+                .Include("order_items.book")
+                .Include("customer_addresses")
+                .FirstOrDefault(x => x.order_id == id && x.customer_id == customerId);
+
+            if (order == null)
+                return HttpNotFound();
+
+            return View("Details", order);
+        }
+
+        // giải phóng db
         protected override void Dispose(bool disposing)
         {
             if (disposing)
