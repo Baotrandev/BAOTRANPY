@@ -1,0 +1,36 @@
+﻿@model IEnumerable<SmartBook.Models.order>
+@using System
+@using System.Linq
+@{
+    ViewBag.Title = "Đơn hàng của tôi - SmartBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .orders-page{background:#f7faf8;min-height:75vh;padding:45px 0 70px;color:#183b36;font-family:'Be Vietnam Pro',sans-serif}
+    .orders-wrap{max-width:1100px;width:92%;margin:auto}.orders-head{text-align:center;margin-bottom:30px}
+    .orders-head h1{font-size:30px;font-weight:900;margin:0 0 8px}.orders-head p{color:#84958b;margin:0}
+    .orders-card{background:#fff;border:1px solid #e4ece6;border-radius:16px;padding:22px;margin-bottom:17px;box-shadow:0 7px 24px rgba(24,59,54,.04)}
+    .orders-top{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;border-bottom:1px solid #edf1ed;padding-bottom:14px;margin-bottom:15px}
+    .orders-code{font-weight:800;color:#24594d}.orders-date{font-size:13px;color:#8a9a91;margin-top:5px}
+    .orders-status{display:inline-block;background:#edf5f0;color:#39766b;border-radius:20px;padding:7px 12px;font-size:12px;font-weight:800;height:max-content}
+    .orders-bottom{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap}.orders-total{font-size:18px;font-weight:900;color:#39766b}
+    .orders-btn{display:inline-block;background:#39766b;color:#fff!important;text-decoration:none;padding:10px 17px;border-radius:8px;font-weight:700;font-size:13px}.orders-empty{text-align:center;padding:55px 20px;background:#fff;border-radius:16px;color:#84958b}.orders-empty i{font-size:42px;color:#9bb8a8;margin-bottom:15px}
+    @@media(max-width:600px){.orders-card{padding:17px}.orders-head h1{font-size:25px}}
+</style>
+<div class="orders-page"><div class="orders-wrap">
+    <div class="orders-head"><h1><i class="fa-solid fa-receipt"></i> Đơn hàng của tôi</h1><p>Theo dõi những đơn hàng bạn đã đặt tại SmartBook</p></div>
+    @if (Model == null || !Model.Any())
+    {
+        <div class="orders-empty"><i class="fa-solid fa-box-open"></i><h3>Bạn chưa có đơn hàng nào</h3><p>Hãy khám phá và chọn cho mình những cuốn sách yêu thích nhé!</p><a class="orders-btn" href="@Url.Action("Index", "Products")">Mua sắm ngay</a></div>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <div class="orders-card">
+                <div class="orders-top"><div><div class="orders-code">Mã đơn: @item.order_code</div><div class="orders-date">Ngày đặt: @item.order_date.ToString("dd/MM/yyyy HH:mm")</div></div><span class="orders-status">@(String.IsNullOrWhiteSpace(item.order_status) ? "Chờ xác nhận" : item.order_status)</span></div>
+                <div class="orders-bottom"><div><span style="color:#84958b;font-size:13px">Tổng thanh toán</span><div class="orders-total">@String.Format("{0:N0}₫", item.total_amount)</div></div><a class="orders-btn" href="@Url.Action("Details", "Orders", new { id = item.order_id })">Xem chi tiết <i class="fa-solid fa-arrow-right"></i></a></div>
+            </div>
+        }
+    }
+</div></div>

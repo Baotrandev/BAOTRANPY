@@ -1,0 +1,41 @@
+﻿@model SmartBook.Models.order
+@using System
+@using System.Linq
+@{
+    ViewBag.Title = "Chi tiết đơn hàng - SmartBook";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var address = Model.customer_addresses;
+}
+<style>
+    .order-detail-page{background:#f7faf8;min-height:75vh;padding:45px 0 70px;color:#183b36;font-family:'Be Vietnam Pro',sans-serif}.order-detail-wrap{max-width:1050px;width:92%;margin:auto}
+    .detail-title{font-size:29px;font-weight:900;margin:0 0 8px}.detail-sub{color:#84958b;margin-bottom:25px}.detail-card{background:#fff;border:1px solid #e4ece6;border-radius:16px;padding:24px;margin-bottom:18px;box-shadow:0 7px 24px rgba(24,59,54,.04)}
+    .detail-card h3{font-size:17px;font-weight:800;margin:0 0 18px;padding-bottom:13px;border-bottom:1px solid #edf1ed}.detail-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.detail-meta span{display:block;color:#8a9a91;font-size:12px;margin-bottom:5px}.detail-meta strong{font-size:14px;overflow-wrap:anywhere}
+    .detail-book{display:grid;grid-template-columns:65px 1fr auto;gap:15px;align-items:center;padding:13px 0;border-bottom:1px solid #edf1ed}.detail-book:last-child{border-bottom:0}.detail-book img{width:60px;height:78px;object-fit:cover;border-radius:6px;background:#f1f4f1}.detail-book h4{font-size:14px;font-weight:800;margin:0 0 6px}.detail-book small{color:#84958b}.detail-price{font-weight:800;white-space:nowrap}.detail-total{margin-left:auto;max-width:360px}.detail-total div{display:flex;justify-content:space-between;padding:8px 0;color:#84958b}.detail-total strong{color:#183b36}.detail-total .grand{border-top:1px dashed #dce7df;margin-top:8px;padding-top:15px;font-size:18px;font-weight:900;color:#39766b}.detail-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}.detail-btn{display:inline-block;padding:11px 17px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:800;background:#39766b;color:#fff!important}.detail-btn.secondary{background:#edf5f0;color:#39766b!important}
+    @@media(max-width:600px){.detail-card{padding:17px}.detail-meta{grid-template-columns:1fr}.detail-book{grid-template-columns:50px 1fr}.detail-book img{width:48px;height:65px}.detail-price{grid-column:2}}
+</style>
+<div class="order-detail-page"><div class="order-detail-wrap">
+    <h1 class="detail-title"><i class="fa-solid fa-file-invoice"></i> Chi tiết đơn hàng</h1>
+    <p class="detail-sub">Thông tin đầy đủ về đơn hàng bạn đã đặt</p>
+    <div class="detail-card"><h3>Thông tin đơn hàng</h3><div class="detail-meta">
+        <div><span>Mã đơn hàng</span><strong>@Model.order_code</strong></div>
+        <div><span>Ngày đặt</span><strong>@Model.order_date.ToString("dd/MM/yyyy HH:mm")</strong></div>
+        <div><span>Trạng thái đơn hàng</span><strong>@(String.IsNullOrWhiteSpace(Model.order_status) ? "Chờ xác nhận" : Model.order_status)</strong></div>
+        <div><span>Trạng thái thanh toán</span><strong>@(String.IsNullOrWhiteSpace(Model.payment_status) ? "Chưa thanh toán" : Model.payment_status)</strong></div>
+    </div></div>
+    <div class="detail-card"><h3><i class="fa-solid fa-location-dot"></i> Thông tin nhận hàng</h3>
+        @if (address != null) { <div class="detail-meta"><div><span>Người nhận</span><strong>@address.recipient_name</strong></div><div><span>Số điện thoại</span><strong>@address.phone</strong></div><div style="grid-column:1/-1"><span>Địa chỉ</span><strong>@address.street_address</strong></div></div> }
+        @if (!String.IsNullOrWhiteSpace(Model.customer_note)) { <p style="margin:15px 0 0;color:#84958b"><b>Ghi chú:</b> @Model.customer_note</p> }
+    </div>
+    <div class="detail-card"><h3><i class="fa-solid fa-book"></i> Sản phẩm đã đặt</h3>
+        @foreach (var line in Model.order_items)
+        {
+            <div class="detail-book">
+                @if (line.book != null && !String.IsNullOrWhiteSpace(line.book.cover_image_url)) { <img src="@Url.Content(line.book.cover_image_url)" alt="Bìa sách" /> } else { <div style="width:60px;height:78px;background:#edf5f0;border-radius:6px;display:flex;align-items:center;justify-content:center"><i class="fa-solid fa-book"></i></div> }
+                <div><h4>@(line.book == null ? "Sách không còn tồn tại" : line.book.book_title)</h4><small>@String.Format("{0:N0}₫", line.unit_price) × @line.quantity</small></div>
+                <div class="detail-price">@String.Format("{0:N0}₫", line.line_total)</div>
+            </div>
+        }
+        <div class="detail-total"><div><span>Tạm tính</span><strong>@String.Format("{0:N0}₫", Model.subtotal)</strong></div><div><span>Giảm giá</span><strong>@String.Format("{0:N0}₫", Model.discount_amount)</strong></div><div><span>Phí vận chuyển</span><strong>@String.Format("{0:N0}₫", Model.shipping_fee)</strong></div><div class="grand"><span>Tổng thanh toán</span><strong>@String.Format("{0:N0}₫", Model.total_amount)</strong></div></div>
+    </div>
+    <div class="detail-actions"><a class="detail-btn secondary" href="@Url.Action("MyOrders", "Orders")"><i class="fa-solid fa-arrow-left"></i> Quay lại đơn hàng</a><a class="detail-btn" href="@Url.Action("Index", "Products")">Tiếp tục mua sắm</a></div>
+</div></div>
