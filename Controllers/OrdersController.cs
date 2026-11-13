@@ -1,7 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using SmartBook.Models;
 
@@ -14,7 +14,6 @@ namespace SmartBook.Controllers
 
         private const string CartKey = "SmartBookCart";
 
-        // form đặt hàng
         [HttpGet]
         public ActionResult Checkout()
         {
@@ -24,9 +23,11 @@ namespace SmartBook.Controllers
             if (cart == null || !cart.Any())
                 return RedirectToAction("Index", "Cart");
 
-            var model = new CheckoutViewModel();
+            var model = new CheckoutViewModel
+            {
+                PaymentMethod = "COD"
+            };
 
-            // login rồi thì tự điền tên
             if (Session["CustomerID"] != null)
             {
                 int customerId;
@@ -46,10 +47,12 @@ namespace SmartBook.Controllers
                 }
             }
 
+            ViewBag.CartItems = cart;
+            ViewBag.CartTotal = cart.Sum(x => x.LineTotal);
+
             return View(model);
         }
 
-        // xử lý đặt hàng + lưu db
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Checkout(CheckoutViewModel model)
@@ -60,10 +63,12 @@ namespace SmartBook.Controllers
             if (cart == null || !cart.Any())
                 return RedirectToAction("Index", "Cart");
 
+            ViewBag.CartItems = cart;
+            ViewBag.CartTotal = cart.Sum(x => x.LineTotal);
+
             if (!ModelState.IsValid)
                 return View(model);
 
-            // check độ dài cột sql kẻo lỗi
             if (model.FullName.Trim().Length > 150)
             {
                 ModelState.AddModelError(
@@ -92,13 +97,78 @@ namespace SmartBook.Controllers
                 return View(model);
             }
 
+            // check xem khách chọn thanh toán kiểu nào để validate đúng form đó
+            if (model.PaymentMethod == "OnlineBanking")
+            {
+                if (string.IsNullOrWhiteSpace(model.BankingProvider))
+                {
+                    ModelState.AddModelError(
+                        "BankingProvider",
+                        "Vui lòng chọn ví điện tử hoặc cổng thanh toán.");
+                    return View(model);
+                }
+            }
+            else if (model.PaymentMethod == "Card")
+            {
+                if (string.IsNullOrWhiteSpace(model.CardType))
+                {
+                    ModelState.AddModelError(
+                        "CardType",
+                        "Vui lòng chọn loại thẻ.");
+                    return View(model);
+                }
+
+                string cleanCard = string.IsNullOrWhiteSpace(model.CardNumber)
+                    ? ""
+                    : model.CardNumber.Replace(" ", "").Replace("-", "");
+
+                if (!Regex.IsMatch(cleanCard, @"^[0-9]{12,19}$"))
+                {
+                    ModelState.AddModelError(
+                        "CardNumber",
+                        "Số thẻ không hợp lệ (cần từ 12 đến 19 chữ số).");
+                    return View(model);
+                }
+
+                if (string.IsNullOrWhiteSpace(model.CardHolder))
+                {
+                    ModelState.AddModelError(
+                        "CardHolder",
+                        "Vui lòng nhập tên chủ thẻ.");
+                    return View(model);
+                }
+
+                if (string.IsNullOrWhiteSpace(model.CardExpiry)
+                    || !Regex.IsMatch(model.CardExpiry.Trim(), @"^(0[1-9]|1[0-2])\/[0-9]{2}$"))
+                {
+                    ModelState.AddModelError(
+                        "CardExpiry",
+                        "Ngày hết hạn không đúng định dạng MM/YY.");
+                    return View(model);
+                }
+
+                if (string.IsNullOrWhiteSpace(model.CardCvv)
+                    || !Regex.IsMatch(model.CardCvv.Trim(), @"^[0-9]{3,4}$"))
+                {
+                    ModelState.AddModelError(
+                        "CardCvv",
+                        "Mã CVV phải gồm 3 hoặc 4 chữ số.");
+                    return View(model);
+                }
+            }
+            else if (model.PaymentMethod != "COD")
+            {
+                ModelState.AddModelError(
+                    "PaymentMethod",
+                    "Phương thức thanh toán không hợp lệ.");
+                return View(model);
+            }
+
             using (var transaction =
                 db.Database.BeginTransaction())
             {
                 try
                 {
-                    // b1: xem ai đang đặt
-
                     int customerId = 0;
 
                     if (Session["CustomerID"] != null)
@@ -113,7 +183,6 @@ namespace SmartBook.Controllers
                             x => x.customer_id == customerId)
                         : null;
 
-                    // session lỗi thì coi như khách vãng lai
                     if (customer == null)
                     {
                         string guestEmail =
@@ -139,8 +208,6 @@ namespace SmartBook.Controllers
                             guestPassword
                         ).Single();
                     }
-
-                    // b2: tạo địa chỉ giao
 
                     int addressId = db.Database.SqlQuery<int>(
                         @"
@@ -175,8 +242,6 @@ namespace SmartBook.Controllers
                         model.Address.Trim()
                     ).Single();
 
-                    // b3: check sách + tính tiền
-
                     decimal subtotal = 0;
 
                     foreach (var item in cart)
@@ -196,7 +261,6 @@ namespace SmartBook.Controllers
                                 "Một cuốn sách trong giỏ hàng không còn tồn tại.");
                         }
 
-                        // lấy giá mới nhất trong db
                         item.UnitPrice = book.sale_price;
 
                         subtotal +=
@@ -206,8 +270,6 @@ namespace SmartBook.Controllers
                     decimal discount = 0;
                     decimal shipping = 0;
                     decimal total = subtotal - discount + shipping;
-
-                    // b4: check tồn kho rồi trừ
 
                     foreach (var item in cart)
                     {
@@ -237,8 +299,6 @@ namespace SmartBook.Controllers
                         }
                     }
 
-                    // b5: tạo mã đơn
-
                     string orderCode =
                         "SB" +
                         DateTime.Now.ToString("yyyyMMddHHmmss") +
@@ -246,8 +306,6 @@ namespace SmartBook.Controllers
                             .ToString("N")
                             .Substring(0, 4)
                             .ToUpper();
-
-                    // b6: lưu đơn
 
                     int orderId = db.Database.SqlQuery<int>(
                         @"
@@ -288,8 +346,6 @@ namespace SmartBook.Controllers
                             : model.Note.Trim()
                     ).Single();
 
-                    // b7: lưu từng món trong đơn
-
                     foreach (var item in cart)
                     {
                         decimal lineTotal =
@@ -325,15 +381,67 @@ namespace SmartBook.Controllers
                         );
                     }
 
-                    // b8: commit xong
+                    string paymentMethodLabel = "COD";
+                    string transactionCode = null;
+                    string paymentStatus = "Chưa thanh toán";
+                    object paymentDate = DBNull.Value;
+
+                    if (model.PaymentMethod == "OnlineBanking")
+                    {
+                        paymentMethodLabel = "Online - " + model.BankingProvider.Trim();
+                        transactionCode = "ONL" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                        paymentStatus = "Chờ xác nhận";
+                        paymentDate = DateTime.Now;
+                    }
+                    else if (model.PaymentMethod == "Card")
+                    {
+                        paymentMethodLabel = "Thẻ - " + model.CardType.Trim();
+                        transactionCode = "CARD" + DateTime.Now.ToString("yyyyMMddHHmmss");
+                        paymentStatus = "Đã thanh toán";
+                        paymentDate = DateTime.Now;
+                    }
+
+                    db.Database.ExecuteSqlCommand(
+                        @"
+                        INSERT INTO dbo.payments
+                            (
+                                order_id,
+                                payment_method,
+                                transaction_code,
+                                amount,
+                                payment_status,
+                                payment_date,
+                                created_at
+                            )
+                        VALUES
+                            (
+                                @p0,
+                                @p1,
+                                @p2,
+                                @p3,
+                                @p4,
+                                @p5,
+                                SYSDATETIME()
+                            );
+                        ",
+                        orderId,
+                        paymentMethodLabel,
+                        string.IsNullOrEmpty(transactionCode)
+                            ? (object)DBNull.Value
+                            : transactionCode,
+                        total,
+                        paymentStatus,
+                        paymentDate
+                    );
 
                     transaction.Commit();
 
-                    // lưu ok mới xóa giỏ nha
                     Session.Remove(CartKey);
 
                     ViewBag.OrderCode = orderCode;
                     ViewBag.Total = total;
+                    ViewBag.PaymentMethod = paymentMethodLabel;
+                    ViewBag.PaymentStatus = paymentStatus;
 
                     return View("Success");
                 }
@@ -352,47 +460,6 @@ namespace SmartBook.Controllers
             }
         }
 
-
-        // Danh sách đơn hàng của tài khoản đang đăng nhập
-        public ActionResult MyOrders()
-        {
-            if (Session["CustomerID"] == null)
-                return RedirectToAction("Login", "Account");
-
-            int customerId;
-            if (!int.TryParse(Session["CustomerID"].ToString(), out customerId))
-                return RedirectToAction("Login", "Account");
-
-            var orders = db.orders
-                .Where(x => x.customer_id == customerId)
-                .OrderByDescending(x => x.order_date)
-                .ToList();
-
-            return View("MyOrders", orders);
-        }
-
-        // Chi tiết đơn hàng - chỉ chủ tài khoản mới được xem
-        public ActionResult Details(int id)
-        {
-            if (Session["CustomerID"] == null)
-                return RedirectToAction("Login", "Account");
-
-            int customerId;
-            if (!int.TryParse(Session["CustomerID"].ToString(), out customerId))
-                return RedirectToAction("Login", "Account");
-
-            var order = db.orders
-                .Include("order_items.book")
-                .Include("customer_addresses")
-                .FirstOrDefault(x => x.order_id == id && x.customer_id == customerId);
-
-            if (order == null)
-                return HttpNotFound();
-
-            return View("Details", order);
-        }
-
-        // giải phóng db
         protected override void Dispose(bool disposing)
         {
             if (disposing)
