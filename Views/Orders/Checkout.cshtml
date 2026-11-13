@@ -1,64 +1,234 @@
-﻿
 @model SmartBook.Models.CheckoutViewModel
+@using System.Collections.Generic
+@using SmartBook.Models
 
 @{
     ViewBag.Title = "Đặt hàng - SmartBook";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var cartItems = ViewBag.CartItems as List<CartItemViewModel> ?? new List<CartItemViewModel>();
+    decimal cartTotal = ViewBag.CartTotal != null ? (decimal)ViewBag.CartTotal : cartItems.Sum(x => x.LineTotal);
 }
 
 <style>
     .checkout-page {
         background: #f7faf8;
         min-height: 80vh;
-        padding: 55px 20px;
+        padding: 48px 20px 70px;
         font-family: 'Be Vietnam Pro', sans-serif;
         color: #23483e;
     }
 
     .checkout-container {
-        max-width: 850px;
+        max-width: 1120px;
         margin: auto;
+    }
+
+    .checkout-layout {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 360px;
+        gap: 24px;
+        align-items: start;
     }
 
     .checkout-card {
         background: white;
-        padding: 35px;
+        padding: 32px;
         border-radius: 20px;
         border: 1px solid #e1ece6;
         box-shadow: 0 10px 30px rgba(40,83,65,.06);
+        margin-bottom: 22px;
     }
 
     .checkout-title {
         color: #183b36;
-        font-size: 30px;
-        font-weight: 900;
+        font-size: 26px;
+        font-weight: 800;
         margin-bottom: 8px;
+    }
+
+    .checkout-subtitle {
+        color: #183b36;
+        font-size: 20px;
+        font-weight: 800;
+        margin: 0 0 18px;
     }
 
     .checkout-desc {
         color: #81938a;
-        margin-bottom: 28px;
+        margin-bottom: 22px;
+        font-size: 14px;
     }
 
     .checkout-label {
         display: block;
         color: #31584b;
         font-weight: 700;
-        margin: 18px 0 8px;
+        margin: 16px 0 8px;
+        font-size: 14px;
     }
 
     .checkout-input {
         width: 100%;
-        padding: 13px 15px;
+        padding: 12px 15px;
         border: 1px solid #dce9e0;
         border-radius: 9px;
         outline: none;
         font-family: inherit;
+        font-size: 14px;
+        box-sizing: border-box;
     }
 
         .checkout-input:focus {
             border-color: #39766b;
             box-shadow: 0 0 0 3px rgba(57,118,107,.1);
+        }
+
+    .checkout-row-2 {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+    }
+
+    .payment-option {
+        border: 1px solid #dce9e0;
+        border-radius: 14px;
+        padding: 16px 18px;
+        margin-bottom: 14px;
+        cursor: pointer;
+        transition: .2s;
+        background: #fff;
+    }
+
+        .payment-option.active {
+            border-color: #39766b;
+            background: #f4faf7;
+            box-shadow: 0 4px 14px rgba(57,118,107,.08);
+        }
+
+    .payment-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 700;
+        color: #183b36;
+        font-size: 15px;
+        cursor: pointer;
+        margin: 0;
+    }
+
+        .payment-header input[type="radio"] {
+            accent-color: #39766b;
+            width: 17px;
+            height: 17px;
+            margin: 0;
+        }
+
+    .payment-note {
+        font-size: 13px;
+        color: #7c8f85;
+        margin: 6px 0 0 29px;
+    }
+
+    .payment-extra {
+        display: none;
+        margin-top: 14px;
+        padding-top: 14px;
+        border-top: 1px dashed #dce9e0;
+        margin-left: 29px;
+    }
+
+        .payment-extra.show {
+            display: block;
+        }
+
+    .wallet-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+
+    .wallet-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 14px;
+        border: 1px solid #dce9e0;
+        border-radius: 999px;
+        background: #fff;
+        font-size: 13px;
+        font-weight: 700;
+        color: #23483e;
+        cursor: pointer;
+    }
+
+        .wallet-pill input {
+            accent-color: #39766b;
+            margin: 0;
+        }
+
+    .qr-box {
+        background: #edf5f0;
+        border-radius: 10px;
+        padding: 12px 14px;
+        font-size: 12px;
+        color: #31584b;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .summary-card {
+        background: white;
+        padding: 26px;
+        border-radius: 20px;
+        border: 1px solid #e1ece6;
+        box-shadow: 0 10px 30px rgba(40,83,65,.06);
+        position: sticky;
+        top: 24px;
+    }
+
+    .summary-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 10px 0;
+        border-bottom: 1px solid #edf1ed;
+        font-size: 13px;
+    }
+
+    .summary-item-name {
+        font-weight: 700;
+        color: #183b36;
+    }
+
+    .summary-item-qty {
+        color: #81938a;
+        font-size: 12px;
+    }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 12px;
+        font-size: 14px;
+        color: #6b7f75;
+    }
+
+    .summary-total {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 16px;
+        padding-top: 14px;
+        border-top: 1px dashed #dce7df;
+        font-size: 18px;
+        font-weight: 800;
+        color: #183b36;
+    }
+
+        .summary-total strong {
+            color: #39766b;
         }
 
     .checkout-submit {
@@ -70,7 +240,7 @@
         color: white;
         font-weight: 800;
         font-size: 15px;
-        margin-top: 25px;
+        margin-top: 22px;
         cursor: pointer;
         transition: .25s;
     }
@@ -84,6 +254,7 @@
         color: #bd6868;
         font-size: 13px;
         margin-top: 5px;
+        display: block;
     }
 
     .validation-summary-errors {
@@ -94,9 +265,23 @@
         margin-bottom: 15px;
     }
 
+    @@media(max-width: 900px) {
+        .checkout-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .summary-card {
+            position: static;
+        }
+    }
+
     @@media(max-width: 600px) {
         .checkout-card {
             padding: 22px 17px;
+        }
+
+        .checkout-row-2 {
+            grid-template-columns: 1fr;
         }
     }
 </style>
@@ -104,70 +289,264 @@
 <div class="checkout-page">
     <div class="checkout-container">
 
-        <div class="checkout-card">
+        @using (Html.BeginForm("Checkout", "Orders", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
 
-            <h1 class="checkout-title">
-                <i class="fa-solid fa-truck-fast"></i>
-                Thông tin đặt hàng
-            </h1>
+            <div class="checkout-layout">
+                <div>
+                    <div class="checkout-card">
+                        <h1 class="checkout-title">
+                            <i class="fa-solid fa-truck-fast"></i>
+                            Thông tin đặt hàng
+                        </h1>
 
-            <p class="checkout-desc">
-                Vui lòng điền chính xác thông tin để SmartBook giao sách đến bạn.
-            </p>
+                        <p class="checkout-desc">
+                            Vui lòng điền chính xác thông tin để SmartBook giao sách đến bạn.
+                        </p>
 
-            @using (Html.BeginForm("Checkout", "Orders", FormMethod.Post))
-            {
-                @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(false, "", new { @class = "field-error" })
 
-                @Html.ValidationSummary(false, "", new { @class = "field-error" })
+                        <div class="checkout-row-2">
+                            <div>
+                                <label class="checkout-label">Họ và tên người nhận *</label>
+                                @Html.TextBoxFor(x => x.FullName,
+                                    new
+                                    {
+                                        @class = "checkout-input",
+                                        placeholder = "Nhập họ và tên"
+                                    })
+                                @Html.ValidationMessageFor(x => x.FullName,
+                                    "", new { @class = "field-error" })
+                            </div>
 
-                <label class="checkout-label">Họ và tên người nhận *</label>
-                @Html.TextBoxFor(x => x.FullName,
-                    new
-                         {
-                        @class = "checkout-input",
-                        placeholder = "Nhập họ và tên"
-                    })
-                @Html.ValidationMessageFor(x => x.FullName,
-                    "", new { @class = "field-error" })
+                            <div>
+                                <label class="checkout-label">Số điện thoại *</label>
+                                @Html.TextBoxFor(x => x.Phone,
+                                    new
+                                    {
+                                        @class = "checkout-input",
+                                        placeholder = "Nhập số điện thoại",
+                                        type = "tel"
+                                    })
+                                @Html.ValidationMessageFor(x => x.Phone,
+                                    "", new { @class = "field-error" })
+                            </div>
+                        </div>
 
-                <label class="checkout-label">Số điện thoại *</label>
-                @Html.TextBoxFor(x => x.Phone,
-                    new
-                         {
-                        @class = "checkout-input",
-                        placeholder = "Nhập số điện thoại",
-                        type = "tel"
-                    })
-                @Html.ValidationMessageFor(x => x.Phone,
-                    "", new { @class = "field-error" })
+                        <label class="checkout-label">Địa chỉ nhận hàng *</label>
+                        @Html.TextAreaFor(x => x.Address,
+                            new
+                            {
+                                @class = "checkout-input",
+                                rows = "3",
+                                placeholder = "Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố"
+                            })
+                        @Html.ValidationMessageFor(x => x.Address,
+                            "", new { @class = "field-error" })
 
-                <label class="checkout-label">Địa chỉ nhận hàng *</label>
-                @Html.TextAreaFor(x => x.Address,
-                    new
-                         {
-                        @class = "checkout-input",
-                        rows = "3",
-                        placeholder = "Số nhà, tên đường, phường/xã, quận/huyện, tỉnh/thành phố"
-                    })
-                @Html.ValidationMessageFor(x => x.Address,
-                    "", new { @class = "field-error" })
+                        <label class="checkout-label">Ghi chú đơn hàng</label>
+                        @Html.TextAreaFor(x => x.Note,
+                            new
+                            {
+                                @class = "checkout-input",
+                                rows = "2",
+                                placeholder = "Ghi chú thêm nếu có..."
+                            })
+                    </div>
 
-                <label class="checkout-label">Ghi chú đơn hàng</label>
-                @Html.TextAreaFor(x => x.Note,
-                    new
-                         {
-                        @class = "checkout-input",
-                        rows = "3",
-                        placeholder = "Ghi chú thêm nếu có..."
-                    })
+                    <div class="checkout-card">
+                        <h2 class="checkout-subtitle">
+                            <i class="fa-solid fa-wallet"></i>
+                            Phương thức thanh toán
+                        </h2>
 
-                <button type="submit" class="checkout-submit">
-                    XÁC NHẬN ĐẶT HÀNG
-                    <i class="fa-solid fa-arrow-right"></i>
-                </button>
-            }
+                        @Html.ValidationMessageFor(x => x.PaymentMethod, "", new { @class = "field-error" })
 
-        </div>
+                        <div class="payment-option" data-method="OnlineBanking">
+                            <label class="payment-header">
+                                @Html.RadioButtonFor(x => x.PaymentMethod, "OnlineBanking", new { id = "pmOnline" })
+                                <i class="fa-solid fa-qrcode" style="color:#39766b;"></i>
+                                <span>Online Banking / Ví điện tử</span>
+                            </label>
+                            <p class="payment-note">Thanh toán nhanh qua MoMo, ZaloPay, VNPay hoặc chuyển khoản.</p>
+
+                            <div class="payment-extra" id="extraOnlineBanking">
+                                <div class="wallet-list">
+                                    <label class="wallet-pill">
+                                        @Html.RadioButtonFor(x => x.BankingProvider, "MoMo")
+                                        <span>MoMo</span>
+                                    </label>
+                                    <label class="wallet-pill">
+                                        @Html.RadioButtonFor(x => x.BankingProvider, "ZaloPay")
+                                        <span>ZaloPay</span>
+                                    </label>
+                                    <label class="wallet-pill">
+                                        @Html.RadioButtonFor(x => x.BankingProvider, "VNPay")
+                                        <span>VNPay</span>
+                                    </label>
+                                    <label class="wallet-pill">
+                                        @Html.RadioButtonFor(x => x.BankingProvider, "Chuyển khoản ngân hàng")
+                                        <span>Chuyển khoản</span>
+                                    </label>
+                                </div>
+                                @Html.ValidationMessageFor(x => x.BankingProvider, "", new { @class = "field-error" })
+
+                                <div class="qr-box">
+                                    <i class="fa-solid fa-qrcode" style="font-size:28px;color:#39766b;"></i>
+                                    <div>
+                                        <strong>Quét mã QR hoặc mở ví sau khi bấm đặt hàng</strong><br />
+                                        Nội dung chuyển khoản: Tên + SĐT đặt sách SmartBook.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-option" data-method="Card">
+                            <label class="payment-header">
+                                @Html.RadioButtonFor(x => x.PaymentMethod, "Card", new { id = "pmCard" })
+                                <i class="fa-solid fa-credit-card" style="color:#39766b;"></i>
+                                <span>Thanh toán bằng thẻ (Credit / Visa / Debit)</span>
+                            </label>
+                            <p class="payment-note">Hỗ trợ thẻ Visa, Mastercard và thẻ ghi nợ nội địa / quốc tế.</p>
+
+                            <div class="payment-extra" id="extraCard">
+                                <div class="wallet-list">
+                                    <label class="wallet-pill">
+                                        @Html.RadioButtonFor(x => x.CardType, "Visa")
+                                        <span>Visa</span>
+                                    </label>
+                                    <label class="wallet-pill">
+                                        @Html.RadioButtonFor(x => x.CardType, "Credit Card")
+                                        <span>Credit Card</span>
+                                    </label>
+                                    <label class="wallet-pill">
+                                        @Html.RadioButtonFor(x => x.CardType, "Debit Card")
+                                        <span>Debit Card</span>
+                                    </label>
+                                </div>
+                                @Html.ValidationMessageFor(x => x.CardType, "", new { @class = "field-error" })
+
+                                <label class="checkout-label">Số thẻ *</label>
+                                @Html.TextBoxFor(x => x.CardNumber, new { @class = "checkout-input", placeholder = "4111 2222 3333 4444", maxlength = "19" })
+                                @Html.ValidationMessageFor(x => x.CardNumber, "", new { @class = "field-error" })
+
+                                <label class="checkout-label">Tên in trên thẻ *</label>
+                                @Html.TextBoxFor(x => x.CardHolder, new { @class = "checkout-input", placeholder = "NGUYEN VAN A" })
+                                @Html.ValidationMessageFor(x => x.CardHolder, "", new { @class = "field-error" })
+
+                                <div class="checkout-row-2">
+                                    <div>
+                                        <label class="checkout-label">Ngày hết hạn (MM/YY) *</label>
+                                        @Html.TextBoxFor(x => x.CardExpiry, new { @class = "checkout-input", placeholder = "12/28", maxlength = "5" })
+                                        @Html.ValidationMessageFor(x => x.CardExpiry, "", new { @class = "field-error" })
+                                    </div>
+                                    <div>
+                                        <label class="checkout-label">CVV *</label>
+                                        @Html.TextBoxFor(x => x.CardCvv, new { @class = "checkout-input", placeholder = "123", maxlength = "4", type = "password" })
+                                        @Html.ValidationMessageFor(x => x.CardCvv, "", new { @class = "field-error" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="payment-option" data-method="COD">
+                            <label class="payment-header">
+                                @Html.RadioButtonFor(x => x.PaymentMethod, "COD", new { id = "pmCod" })
+                                <i class="fa-solid fa-money-bill-wave" style="color:#39766b;"></i>
+                                <span>Thanh toán khi nhận hàng (COD)</span>
+                            </label>
+                            <p class="payment-note">Kiểm tra sách và thanh toán tiền mặt trực tiếp cho shipper.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <aside class="summary-card">
+                    <h2 class="checkout-subtitle">Tóm tắt đơn hàng</h2>
+
+                    @foreach (var item in cartItems)
+                    {
+                        <div class="summary-item">
+                            <div>
+                                <div class="summary-item-name">@item.BookTitle</div>
+                                <div class="summary-item-qty">Số lượng: @item.Quantity</div>
+                            </div>
+                            <strong>@item.LineTotal.ToString("N0") đ</strong>
+                        </div>
+                    }
+
+                    <div class="summary-row">
+                        <span>Tạm tính</span>
+                        <strong>@cartTotal.ToString("N0") đ</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Phí vận chuyển</span>
+                        <strong style="color:#39766b;">Miễn phí</strong>
+                    </div>
+
+                    <div class="summary-total">
+                        <span>Tổng cộng</span>
+                        <strong>@cartTotal.ToString("N0") đ</strong>
+                    </div>
+
+                    <button type="submit" class="checkout-submit">
+                        XÁC NHẬN ĐẶT HÀNG
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </aside>
+            </div>
+        }
+
     </div>
 </div>
+
+@section scripts {
+    <script>
+        (function () {
+            var cards = document.querySelectorAll('.payment-option');
+            var radios = document.querySelectorAll('input[name="PaymentMethod"]');
+
+            // bật tắt mấy cái form ví với thẻ theo lựa chọn của khách nha
+            function refreshPaymentUI() {
+                var selected = document.querySelector('input[name="PaymentMethod"]:checked');
+                var method = selected ? selected.value : 'COD';
+
+                cards.forEach(function (card) {
+                    if (card.getAttribute('data-method') === method) {
+                        card.classList.add('active');
+                    } else {
+                        card.classList.remove('active');
+                    }
+                });
+
+                var extraOnline = document.getElementById('extraOnlineBanking');
+                var extraCard = document.getElementById('extraCard');
+
+                if (extraOnline) {
+                    extraOnline.classList.toggle('show', method === 'OnlineBanking');
+                }
+                if (extraCard) {
+                    extraCard.classList.toggle('show', method === 'Card');
+                }
+            }
+
+            radios.forEach(function (r) {
+                r.addEventListener('change', refreshPaymentUI);
+            });
+
+            cards.forEach(function (card) {
+                card.addEventListener('click', function (e) {
+                    if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') return;
+                    var radio = card.querySelector('input[name="PaymentMethod"]');
+                    if (radio) {
+                        radio.checked = true;
+                        refreshPaymentUI();
+                    }
+                });
+            });
+
+            refreshPaymentUI();
+        })();
+    </script>
+}

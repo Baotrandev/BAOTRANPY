@@ -1,4 +1,3 @@
-﻿
 @{
     ViewBag.Title = "Đặt hàng thành công - SmartBook";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -52,6 +51,17 @@
         font-weight: 800;
     }
 
+    .success-payment {
+        background: #f7faf8;
+        border: 1px solid #dce9e0;
+        color: #31584b;
+        padding: 12px 15px;
+        border-radius: 10px;
+        margin-bottom: 18px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
     .success-total {
         font-size: 23px;
         color: #39766b;
@@ -92,6 +102,13 @@
         <div class="success-code">
             Mã đơn hàng: @ViewBag.OrderCode
         </div>
+
+        @if (ViewBag.PaymentMethod != null)
+        {
+            <div class="success-payment">
+                Thanh toán: @ViewBag.PaymentMethod (@ViewBag.PaymentStatus)
+            </div>
+        }
 
         <div class="success-total">
             Tổng thanh toán: @String.Format("{0:N0}₫", ViewBag.Total)
