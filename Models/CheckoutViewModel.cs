@@ -1,4 +1,3 @@
-﻿
 using System.ComponentModel.DataAnnotations;
 
 namespace SmartBook.Models
@@ -17,5 +16,20 @@ namespace SmartBook.Models
         public string Address { get; set; }
 
         public string Note { get; set; }
+
+        [Required(ErrorMessage = "Vui lòng chọn phương thức thanh toán.")]
+        public string PaymentMethod { get; set; }
+
+        public string BankingProvider { get; set; }
+
+        public string CardType { get; set; }
+
+        public string CardNumber { get; set; }
+
+        public string CardHolder { get; set; }
+
+        public string CardExpiry { get; set; }
+
+        public string CardCvv { get; set; }
     }
 }
